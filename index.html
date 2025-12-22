@@ -4,63 +4,21 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Block Education</title>
-    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Import Map to resolve bare module specifiers in the browser -->
-    <script type="importmap">
-      {
-        "imports": {
-          "react": "https://esm.sh/react@18.2.0",
-          "react-dom": "https://esm.sh/react-dom@18.2.0/client",
-          "lucide-react": "https://esm.sh/lucide-react@0.284.0"
-        }
-      }
-    </script>
   </head>
   <body class="bg-black">
     <div id="root"></div>
-    
-    <!-- Script to grab App.jsx content and execute it -->
     <script type="module">
       import React from 'react';
-      import ReactDOM from 'react-dom';
+      import ReactDOM from 'react-dom/client';
+      import App from './App.jsx';
 
-      async function startApp() {
-        try {
-          // Use absolute path for the artifact to avoid URL parsing errors in this environment
-          const appPath = window.location.origin + window.location.pathname.replace(/[^\/]*$/, 'App.jsx');
-          const response = await fetch(appPath);
-          
-          if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-          
-          const code = await response.text();
-          
-          // Use a Data URL to ensure the code is treated as a module independently of the current URL context
-          const encodedCode = encodeURIComponent(code);
-          const dataUrl = `data:text/javascript;charset=utf-8,${encodedCode}`;
-          
-          const { default: App } = await import(dataUrl);
-
-          const root = ReactDOM.createRoot(document.getElementById('root'));
-          root.render(
-            React.createElement(React.StrictMode, null, 
-              React.createElement(App)
-            )
-          );
-        } catch (err) {
-          console.error("Failed to load App.jsx:", err);
-          document.getElementById('root').innerHTML = `
-            <div style="color: #f43f5e; padding: 20px; font-family: monospace; background: #111; border: 1px solid #e11d48; margin: 20px; border-radius: 8px;">
-              <h3 style="margin-top: 0;">Runtime Error</h3>
-              <p>Failed to load application components.</p>
-              <pre style="font-size: 12px; white-space: pre-wrap;">${err.stack || err.message}</pre>
-            </div>
-          `;
-        }
-      }
-
-      startApp();
+      ReactDOM.createRoot(document.getElementById('root')).render(
+        React.createElement(React.StrictMode, null, 
+          React.createElement(App)
+        )
+      );
     </script>
   </body>
 </html>
+
