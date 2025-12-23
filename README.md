@@ -33,7 +33,7 @@ An immersive, 3D experience built for the Farcaster ecosystem. This project guid
 ## Project Structure
 
 - \`components/episodes/\`: Contains all 30 interactive lesson components.
-- \`components/FrameShell.tsx\`: The main VR container and UI overlay.
+- \`components/GameController.tsx\`: The main VR container and UI overlay.
 - \`app/page.tsx\`: The game controller and state management.
 
 ---
