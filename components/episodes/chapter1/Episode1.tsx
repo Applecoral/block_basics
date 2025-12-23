@@ -1,15 +1,21 @@
 "use client";
-import { useState } from "react";
+import { useState, useRef } from "react";
 
 interface Props { onComplete: () => void; }
 
 export default function Episode1({ onComplete }: Props) {
   const [val, setVal] = useState("");
+  const inputRef = useRef<HTMLInputElement>(null);
   const isSolved = val.toUpperCase() === "BLOCK";
+
+  // Focus the input when clicking the container
+  const handleContainerClick = () => {
+    inputRef.current?.focus();
+  };
 
   return (
     <>
-      {/* 3D Elements - These stay in the A-Frame world */}
+      {/* 3D CONTENT */}
       <a-entity>
         <a-box 
           position="0 1.5 -3" 
@@ -22,33 +28,44 @@ export default function Episode1({ onComplete }: Props) {
         ></a-text>
       </a-entity>
 
-      {/* 2D Interface - Forced to the top layer */}
-      <div className="fixed inset-x-0 bottom-10 z-[9999] flex flex-col items-center pointer-events-none">
-        <div className="pointer-events-auto flex flex-col items-center bg-black/60 p-4 backdrop-blur-md border border-[#ff00ff]/30">
-          <p className="text-[#00f2ff] text-[10px] tracking-widest mb-2 uppercase font-bold text-center">
-            Terminal: Hashing Protocol
-          </p>
-          <input 
-            type="text" 
-            placeholder="ENTER KEYWORD..." 
-            className="bg-black/80 border-2 border-[#ff00ff] text-[#ff00ff] p-3 rounded-none w-64 text-center focus:shadow-[0_0_15px_#ff00ff] outline-none placeholder:text-[#ff00ff]/50 text-sm mb-4"
-            onChange={(e) => setVal(e.target.value)}
-            // Ensure keyboard pops up on mobile
-            inputMode="text"
-          />
+      {/* 2D HUD OVERLAY - This is the "Glass" of the screen */}
+      <div 
+        className="fixed inset-0 z-[100] flex flex-col items-center justify-end pb-12 pointer-events-none"
+        style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0 }}
+      >
+        <div 
+          onClick={handleContainerClick}
+          className="pointer-events-auto bg-black/90 border-2 border-[#ff00ff] p-6 flex flex-col items-center shadow-[0_0_30px_rgba(255,0,255,0.2)] cursor-text active:scale-95 transition-transform"
+        >
+          <div className="flex items-center gap-2 mb-3">
+             <div className="w-2 h-2 bg-[#ff00ff] animate-pulse rounded-full" />
+             <p className="text-[#00f2ff] text-[12px] tracking-[0.3em] uppercase font-black">
+               {isSolved ? "PROTOCOL DECRYPTED" : "TYPE TO DECRYPT"}
+             </p>
+          </div>
+
+          <div className="relative">
+            <input 
+              ref={inputRef}
+              type="text" 
+              placeholder="________________" 
+              className="bg-transparent border-none text-[#ff00ff] p-2 w-64 text-center focus:outline-none placeholder:text-[#ff00ff]/30 text-xl font-mono tracking-widest"
+              onChange={(e) => setVal(e.target.value)}
+              autoFocus
+            />
+            {/* Visual Indicator: Blinking Cursor Line */}
+            {!val && <div className="absolute bottom-2 left-1/2 -translate-x-1/2 w-32 h-[2px] bg-[#ff00ff] animate-bounce" />}
+          </div>
+
           {isSolved && (
             <button 
-              onClick={onComplete} 
-              className="px-6 py-2 bg-[#00f2ff] text-black font-black text-[10px] uppercase tracking-tighter hover:bg-white transition-all shadow-[0_0_15px_#00f2ff]"
+              onClick={(e) => { e.stopPropagation(); onComplete(); }} 
+              className="mt-4 px-8 py-3 bg-[#00f2ff] text-black font-black text-xs uppercase tracking-[0.2em] hover:scale-105 transition-all shadow-[0_0_20px_#00f2ff]"
             >
-              Initialize Genesis
+              INITIALIZE GENESIS
             </button>
           )}
         </div>
-      </div>
-    </>
-  );
-}
       </div>
     </>
   );
