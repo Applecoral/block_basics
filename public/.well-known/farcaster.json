@@ -1,0 +1,17 @@
+{
+  "accountAssociation": {
+    "header": "PASTE_FROM_TOOL",
+    "payload": "PASTE_FROM_TOOL",
+    "signature": "PASTE_FROM_TOOL"
+  },
+  "frame": {
+    "version": "1",
+    "name": "Block Basics",
+    "homeUrl": "https://block-basics.vercel.app",
+    "iconUrl": "https://block-basics.vercel.app/icon.png",
+    "imageUrl": "https://block-basics.vercel.app/og-image.png",
+    "buttonTitle": "Play the Quest",
+    "splashImageUrl": "https://block-basics.vercel.app/icon.png",
+    "splashBackgroundColor": "#000000"
+  }
+}
