@@ -4,56 +4,79 @@ import { useState } from "react";
 interface Props { onComplete: () => void; }
 
 export default function Episode3({ onComplete }: Props) {
-  const [isHacked, setIsHacked] = useState(true);
-  const [isFixed, setIsFixed] = useState(false);
-
-  const fixBlock = () => {
-    setIsHacked(false);
-    setTimeout(() => setIsFixed(true), 800);
-  };
+  const [nonce, setNonce] = useState(0);
+  const TARGET_NONCE = 7; // The magic number to "validate" the block
+  const isSynced = nonce === TARGET_NONCE;
 
   return (
     <>
       <a-entity>
-        {/* Genesis Block - Corrupted State */}
+        {/* The Main Server Rack */}
         <a-box 
-          position="-2 1.5 -3" 
-          color={isHacked ? "#ff3333" : "#00f2ff"} 
-          animation={isHacked ? "property: position; to: -2 1.6 -3; dir: alternate; dur: 100; loop: true" : ""}
-          onClick={fixBlock}
+          position="0 1.5 -4" 
+          scale="1.5 3 0.5" 
+          material={`color: #111; metalness: 0.8; roughness: 0.2`}
         >
-          <a-text 
-            value={isHacked ? "CORRUPTED" : "SECURE"} 
-            position="0 1.2 0" align="center" width="3" color="white">
-          </a-text>
+          {/* Server Status Lights */}
+          <a-sphere 
+            position="0.4 1 0.3" radius="0.05" 
+            material={`color: ${isSynced ? '#00ff00' : '#ff0000'}; emissive: ${isSynced ? '#00ff00' : '#ff0000'}`}
+            animation="property: opacity; from: 1; to: 0.2; dir: alternate; loop: true; dur: 500"
+          ></a-sphere>
+          
+          {/* Internal Components (Glow) */}
+          <a-box 
+            scale="0.8 0.1 0.1" position="0 0.5 0.26" 
+            material={`color: ${isSynced ? '#00f2ff' : '#ff3300'}; emissive: ${isSynced ? '#00f2ff' : '#ff3300'}`}
+          ></a-box>
         </a-box>
 
-        {/* Broken Connection Line */}
-        <a-entity 
-          geometry="primitive: cylinder; height: 4; radius: 0.05" 
-          position="0 1.5 -3" 
-          rotation="0 0 90" 
-          material={`color: ${isFixed ? '#00ff00' : '#ff3333'}; opacity: ${isFixed ? 1 : 0.2}`}
-        ></a-entity>
-
-        {/* Next Block - Reacting to the break */}
-        <a-box position="2 1.5 -3" color={isFixed ? "#00f2ff" : "#222"}>
-          <a-text value="INVALID HASH" position="0 1.2 0" align="center" width="2.5" color="#ff3333" visible={!isFixed}></a-text>
-        </a-box>
+        {/* Ambient Server Room Floor */}
+        <a-plane rotation="-90 0 0" width="20" height="20" color="#050505"></a-plane>
+        
+        {/* Holographic Text */}
+        <a-text 
+          value={isSynced ? "SYSTEM SYNCED" : "CRITICAL ERROR: DATA MISMATCH"} 
+          position="0 3.5 -4" align="center" width="4" color={isSynced ? "#00f2ff" : "#ff3300"}
+        ></a-text>
       </a-entity>
 
-      <div className="flex flex-col items-center">
-        <p className="text-[#ff00ff] text-[10px] tracking-widest mb-2 uppercase">Alert: Integrity Violation</p>
-        <p className="text-white text-xs text-center max-w-xs mb-4">
-          {isFixed 
-            ? "Chain integrity restored. Immutability confirmed." 
-            : "A hacker changed the Genesis data! The chain is broken. Tap the red block to Re-Hash and fix the link."}
-        </p>
-        {isFixed && (
-          <button onClick={onComplete} className="px-6 py-2 border-2 border-[#00ff00] text-[#00ff00] font-bold text-xs uppercase shadow-[0_0_10px_#00ff00]">
-            Continue Journey
-          </button>
-        )}
+      {/* 2D CYBER HUD */}
+      <div className="fixed inset-0 z-[100] flex flex-col items-center justify-end pb-12 pointer-events-none">
+        <div className="pointer-events-auto bg-[#0a0a0a]/95 border-l-4 border-[#00f2ff] p-6 w-80 shadow-[20px_0_50px_rgba(0,242,255,0.1)]">
+          <h2 className="text-[#00f2ff] font-mono text-xs tracking-tighter mb-1">NODE_STATION_03</h2>
+          <p className="text-white/40 text-[10px] uppercase mb-6 tracking-[0.2em]">Adjust Nonce to match Network Target</p>
+          
+          <div className="flex items-center justify-between gap-4 mb-8">
+            <button 
+              onClick={() => setNonce(n => Math.max(0, n - 1))}
+              className="w-12 h-12 border border-[#00f2ff] text-[#00f2ff] hover:bg-[#00f2ff] hover:text-black transition-all font-bold"
+            > - </button>
+            
+            <div className="text-center">
+              <span className="text-4xl font-black text-white font-mono">{nonce}</span>
+              <p className="text-[10px] text-white/30">CURRENT_NONCE</p>
+            </div>
+
+            <button 
+              onClick={() => setNonce(n => n + 1)}
+              className="w-12 h-12 border border-[#00f2ff] text-[#00f2ff] hover:bg-[#00f2ff] hover:text-black transition-all font-bold"
+            > + </button>
+          </div>
+
+          {isSynced ? (
+            <button 
+              onClick={onComplete}
+              className="w-full py-4 bg-[#00f2ff] text-black font-black text-xs uppercase tracking-widest shadow-[0_0_20px_rgba(0,242,255,0.5)]"
+            >
+              UPLOAD TO MAINNET
+            </button>
+          ) : (
+            <div className="text-[#ff3300] text-[10px] text-center font-mono animate-pulse">
+              [ WAITING FOR VALID NONCE... ]
+            </div>
+          )}
+        </div>
       </div>
     </>
   );
