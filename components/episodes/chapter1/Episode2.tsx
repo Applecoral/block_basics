@@ -1,52 +1,57 @@
 "use client";
-import { useState } from "react";
+import { useState, useRef } from "react";
 
 interface Props { onComplete: () => void; }
 
 export default function Episode2({ onComplete }: Props) {
-  const [isLinked, setIsLinked] = useState(false);
-  const [showLink, setShowLink] = useState(false);
-
-  const handleConnect = () => {
-    setShowLink(true);
-    setTimeout(() => setIsLinked(true), 1000);
-  };
+  const [inputHash, setInputHash] = useState("");
+  const GENESIS_HASH = "0000X9"; // The "target" from the previous block
+  const isLinked = inputHash.toUpperCase() === GENESIS_HASH;
 
   return (
     <>
       <a-entity>
-        <a-box position="-2 1.5 -3" color="#00f2ff" scale="0.8 0.8 0.8" material="emissive: #00f2ff; emissiveIntensity: 0.2">
-          <a-text value="GENESIS" position="0 1.2 0" align="center" width="3" color="#00f2ff"></a-text>
-        </a-box>
+        {/* The Genesis Block (Static) */}
+        <a-box position="-2 1.5 -4" scale="0.8 0.8 0.8" color="#00f2ff" opacity="0.5"></a-box>
+        <a-text value="GENESIS: 0000X9" position="-2 2.5 -4" align="center" width="3" color="#00f2ff"></a-text>
 
-        {showLink && (
-          <a-entity 
-            geometry="primitive: cylinder; height: 4; radius: 0.05" 
-            position="0 1.5 -3" rotation="0 0 90" 
-            material={`color: #ff00ff; emissive: #ff00ff; opacity: ${isLinked ? 1 : 0.4}`}
-            animation={!isLinked ? "property: material.opacity; to: 1; dur: 1000; loop: true; dir: alternate" : ""}
-          ></a-entity>
-        )}
-
+        {/* The New Block (Pending Link) */}
         <a-box 
-          position="2 1.5 -3" 
-          color={isLinked ? "#00f2ff" : "#333"} scale="0.8 0.8 0.8"
-          onClick={handleConnect}
-        >
-          <a-text value={isLinked ? "LINKED" : "ORPHAN"} position="0 1.2 0" align="center" width="3" color={isLinked ? "#00f2ff" : "#666"}></a-text>
-        </a-box>
+          position="2 1.5 -4" 
+          material={`color: ${isLinked ? '#00f2ff' : '#555'}; wireframe: ${!isLinked}`}
+          animation={isLinked ? "property: position; to: 1 1.5 -4; dur: 1000" : ""}
+        ></a-box>
+        
+        {/* Visual Chain Connector */}
+        {isLinked && (
+          <a-entity line="start: -1.6 1.5 -4; end: 0.6 1.5 -4; color: #00f2ff"></a-entity>
+        )}
       </a-entity>
 
-      <div className="flex flex-col items-center">
-        <p className="text-[#ff00ff] text-[10px] tracking-widest mb-2 uppercase font-bold text-center">Protocol: Chain Linkage</p>
-        <p className="text-white text-[10px] text-center max-w-xs mb-4 uppercase opacity-70">
-          {isLinked ? "Connection established. Cryptographic bond secure." : "Block 2 is isolated. Tap it to sync with Genesis hash."}
-        </p>
-        {isLinked && (
-          <button onClick={onComplete} className="px-6 py-2 border-2 border-[#00f2ff] text-[#00f2ff] font-bold text-[10px] uppercase hover:bg-[#00f2ff] hover:text-black transition-all shadow-[0_0_10px_#00f2ff]">
-            Verify Sequence
-          </button>
-        )}
+      {/* HUD OVERLAY */}
+      <div className="fixed inset-0 z-[100] flex flex-col items-center justify-end pb-12 pointer-events-none">
+        <div className="pointer-events-auto bg-black/90 border-2 border-[#00f2ff] p-6 flex flex-col items-center shadow-[0_0_30px_rgba(0,242,255,0.2)]">
+          <p className="text-[#00f2ff] text-[10px] tracking-widest mb-2 font-black">
+            MISSION: LINK TO PREVIOUS HASH
+          </p>
+          <p className="text-white/50 text-[9px] mb-4">ENTER GENESIS HASH TO SECURE CHAIN</p>
+          
+          <input 
+            type="text" 
+            placeholder="PASTE PREVIOUS HASH..." 
+            className="bg-transparent border-b-2 border-[#00f2ff] text-[#00f2ff] p-2 w-64 text-center focus:outline-none font-mono"
+            onChange={(e) => setInputHash(e.target.value)}
+          />
+
+          {isLinked && (
+            <button 
+              onClick={onComplete} 
+              className="mt-6 px-8 py-2 bg-[#00f2ff] text-black font-black text-xs tracking-tighter animate-bounce"
+            >
+              BLOCK 2 SECURED →
+            </button>
+          )}
+        </div>
       </div>
     </>
   );
