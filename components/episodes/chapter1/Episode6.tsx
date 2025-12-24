@@ -36,8 +36,17 @@ export default function Episode6({ onComplete }: Props) {
   return (
     <div className="w-full h-full flex flex-col items-center justify-center p-6 bg-[#050505] text-white">
       <div className="bg-black/90 border-2 border-[#ff00ff] p-6 flex flex-col items-center shadow-[0_0_30px_rgba(255,0,255,0.2)] space-y-4">
+        
+        {/* Episode Explainer */}
+        <p className="text-[#ff00ff] text-[10px] tracking-widest font-black uppercase text-center">
+          EPISODE 6: GLOBAL LEDGER SYNC
+        </p>
+        <p className="text-white/50 text-[9px] text-center mb-4">
+          Collect all three data packets from the distributed network nodes to initiate a global ledger synchronization. Ensure all packets are captured to write the history stream to the chain.
+        </p>
+
         <h2 className="text-[#ff00ff] text-xs uppercase font-black tracking-widest">LEDGER_CORE SYNC</h2>
-        <p className="text-white/40 text-[9px] uppercase tracking-widest text-center">
+        <p className="text-white/40 text-[9px] uppercase tracking-widest text-center mb-4">
           Collect all 3 data packets to initiate the global history sync
         </p>
 
@@ -57,7 +66,7 @@ export default function Episode6({ onComplete }: Props) {
                 {clustersCaptured.includes(i) ? `PACKET_${String.fromCharCode(64 + i)} COLLECTED` : `CAPTURE PACKET_${String.fromCharCode(64 + i)}`}
               </button>
             ))}
-            <p className="text-white/40 text-[9px] mt-2">Packets captured: {clustersCaptured.length}/3</p>
+            <p className="text-white/40 text-[9px] mt-2 text-center">Packets captured: {clustersCaptured.length}/3</p>
           </div>
         ) : syncProgress < 100 ? (
           <div className="flex flex-col items-center space-y-2">
