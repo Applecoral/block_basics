@@ -4,87 +4,99 @@ import { useState } from "react";
 interface Props { onComplete: () => void; }
 
 export default function Episode5({ onComplete }: Props) {
-  const [rotation, setRotation] = useState(0);
-  const TARGET_ROTATION = 180; // The angle required for the handshake
-  const isAligned = rotation >= 170 && rotation <= 190;
+  const [activeNodes, setActiveNodes] = useState<number[]>([]);
+  const requiredSequence = [1, 2, 3];
+  const isSynced = JSON.stringify(activeNodes) === JSON.stringify(requiredSequence);
+
+  const handleNodeClick = (id: number) => {
+    if (isSynced) return;
+    // If they click the wrong order or an already active node, reset
+    if (activeNodes.includes(id)) {
+      setActiveNodes([]);
+    } else {
+      setActiveNodes([...activeNodes, id]);
+    }
+  };
 
   return (
     <>
       <a-entity>
-        {/* Environment: Grid and Horizon */}
-        <a-grid position="0 0 0" rotation="-90 0 0" width="100" height="100" color="#111"></a-grid>
+        {/* Environment: Cyber Void */}
+        <a-plane rotation="-90 0 0" width="100" height="100" color="#020202"></a-plane>
+        <a-light type="ambient" color="#333"></a-light>
         
-        {/* The Remote Peer (Static) */}
-        <a-entity position="-3 2 -6">
-          <a-octahedron radius="0.8" material="color: #ff00ff; wireframe: true; emissive: #ff00ff; emissiveIntensity: 0.5"></a-octahedron>
-          <a-text value="PEER_REMOTE" position="0 1.2 0" align="center" width="3" color="#ff00ff"></a-text>
-          {/* Signal Beam coming from Peer */}
-          <a-entity line={`start: 0 0 0; end: ${3 - (rotation/60)} 0 0; color: #ff00ff; opacity: 0.5`}></a-entity>
+        {/* Source Stream (Left) */}
+        <a-entity position="-5 2 -6">
+          <a-torus radius="0.5" radius-tubular="0.01" color="#ff00ff" animation="property: rotation; to: 0 360 360; loop: true; dur: 5000"></a-torus>
+          <a-text value="SOURCE_STREAM" position="0 1 0" align="center" width="3" color="#ff00ff"></a-text>
         </a-entity>
 
-        {/* The Player's Node (The "Antenna") */}
-        <a-entity position="2 2 -6" rotation={`0 ${rotation} 0`}>
-          <a-box scale="1 1 1" material={`color: ${isAligned ? '#00f2ff' : '#222'}; metalness: 0.9; roughness: 0.1`}>
-            {/* Directional Indicator */}
-            <a-cone radius-bottom="0.1" radius-top="0" height="0.5" position="0 0 -0.6" rotation="90 0 0" color="#00f2ff"></a-cone>
-          </a-box>
-          <a-text value="LOCAL_NODE" position="0 1.2 0" align="center" width="3" color="#00f2ff"></a-text>
+        {/* Target Stream (Right) */}
+        <a-entity position="5 2 -6">
+          <a-torus radius="0.5" radius-tubular="0.01" color="#00f2ff" animation="property: rotation; to: 360 360 0; loop: true; dur: 5000"></a-torus>
+          <a-text value="TARGET_GATE" position="0 1 0" align="center" width="3" color="#00f2ff"></a-text>
         </a-entity>
 
-        {/* Success Visual: The Link Bridge */}
-        {isAligned && (
-          <a-entity 
-            line="start: -3 2 -6; end: 2 2 -6; color: #00f2ff"
-            animation="property: scale; from: 0 1 1; to: 1 1 1; dur: 500"
-          ></a-entity>
+        {/* INTERACTIVE NODES (The Bridge) */}
+        {/* Node 1: SYNCHRONIZER */}
+        <a-entity class="clickable" position="-2 2 -5" onClick={() => handleNodeClick(1)}>
+          <a-dodecahedron radius="0.4" 
+            material={`shader: flat; color: ${activeNodes.includes(1) ? '#00f2ff' : '#222'}; wireframe: true`}
+            animation={activeNodes.includes(1) ? "property: rotation; to: 0 360 0; loop: true; dur: 2000" : ""}
+          ></a-dodecahedron>
+          <a-text value="SYNCH_01" position="0 -0.8 0" align="center" width="2.5"></a-text>
+        </a-entity>
+
+        {/* Node 2: ENCRYPTOR */}
+        <a-entity class="clickable" position="0 2 -5" onClick={() => handleNodeClick(2)}>
+          <a-dodecahedron radius="0.4" 
+            material={`shader: flat; color: ${activeNodes.includes(2) ? '#00f2ff' : '#222'}; wireframe: true`}
+            animation={activeNodes.includes(2) ? "property: rotation; to: 360 0 0; loop: true; dur: 2000" : ""}
+          ></a-dodecahedron>
+          <a-text value="ENCR_02" position="0 -0.8 0" align="center" width="2.5"></a-text>
+        </a-entity>
+
+        {/* Node 3: VALIDATOR */}
+        <a-entity class="clickable" position="2 2 -5" onClick={() => handleNodeClick(3)}>
+          <a-dodecahedron radius="0.4" 
+            material={`shader: flat; color: ${activeNodes.includes(3) ? '#00f2ff' : '#222'}; wireframe: true`}
+            animation={activeNodes.includes(3) ? "property: rotation; to: 0 0 360; loop: true; dur: 2000" : ""}
+          ></a-dodecahedron>
+          <a-text value="VALI_03" position="0 -0.8 0" align="center" width="2.5"></a-text>
+        </a-entity>
+
+        {/* Bridge Connection Lines */}
+        {isSynced && (
+           <a-entity line="start: -5 2 -6; end: 5 2 -6; color: #00f2ff"
+                     animation="property: scale; from: 0 1 1; to: 1 1 1; dur: 500"></a-entity>
         )}
       </a-entity>
 
-      {/* 2D CYBER TERMINAL UI */}
+      {/* 2D HUD */}
       <div className="fixed inset-0 z-[100] flex flex-col items-center justify-end pb-12 pointer-events-none">
-        <div className="pointer-events-auto bg-[#050505]/95 border-r-4 border-[#00f2ff] p-6 w-80 shadow-[-20px_0_50px_rgba(0,242,255,0.1)]">
-          <div className="flex justify-between items-center mb-2">
-            <h2 className="text-[#00f2ff] font-black text-[10px] tracking-widest">P2P_HANDSHAKE_v2</h2>
-            <span className={`text-[9px] ${isAligned ? 'text-[#00f2ff]' : 'text-[#ff00ff] animate-pulse'}`}>
-              {isAligned ? '● LINKED' : '○ SCANNING'}
-            </span>
-          </div>
-
-          <p className="text-white/40 text-[9px] mb-6 leading-relaxed uppercase">
-            Nodes must align their transmission vectors. <br/>
-            Rotate your station to <span className="text-white">180°</span> to bridge the gap.
+        <div className="pointer-events-auto bg-[#050505]/95 border-l-4 border-[#ff00ff] p-6 w-80 backdrop-blur-md">
+          <p className="text-[#ff00ff] text-[10px] tracking-[0.3em] font-black uppercase mb-1">HANDSHAKE_PROTOCOL</p>
+          <p className="text-white/20 text-[8px] font-mono mb-4 uppercase tracking-tighter text-nowrap">Status: Awaiting Sequence Authorization</p>
+          
+          <p className="text-white/50 text-[10px] uppercase leading-relaxed mb-6 font-mono">
+            Bridge the gap. Activate nodes in sequence: <br/>
+            <span className="text-[#00f2ff] font-bold">SYNCH → ENCR → VALI</span>
           </p>
-
-          <div className="space-y-6">
-            <div className="relative pt-1">
-              <input 
-                type="range" 
-                min="0" 
-                max="360" 
-                value={rotation}
-                onChange={(e) => setRotation(parseInt(e.target.value))}
-                className="w-full h-1 bg-white/10 appearance-none cursor-pointer accent-[#00f2ff]"
-              />
-              <div className="flex justify-between mt-2 font-mono text-[10px] text-white/30">
-                <span>0°</span>
-                <span className="text-[#00f2ff] font-bold">{rotation}°</span>
-                <span>360°</span>
-              </div>
+          
+          {!isSynced ? (
+            <div className="flex gap-2 mb-4 justify-center">
+               {[1,2,3].map(i => (
+                 <div key={i} className={`w-8 h-1 transition-all duration-300 ${activeNodes.length >= i ? 'bg-[#00f2ff]' : 'bg-white/10'}`} />
+               ))}
             </div>
-
-            {isAligned ? (
-              <button 
-                onClick={onComplete}
-                className="w-full py-4 bg-[#00f2ff] text-black font-black text-xs uppercase tracking-widest shadow-[0_0_25px_#00f2ff] transition-all"
-              >
-                ESTABLISH CONNECTION
-              </button>
-            ) : (
-              <div className="py-4 border border-white/5 text-center">
-                <p className="text-[8px] text-white/20 tracking-[0.3em]">WAITING FOR ALIGNMENT...</p>
-              </div>
-            )}
-          </div>
+          ) : (
+            <button 
+              onClick={onComplete} 
+              className="w-full py-4 bg-[#ff00ff] text-white font-black text-xs uppercase tracking-[0.2em] shadow-[0_0_30px_rgba(255,0,255,0.4)]"
+            >
+              Handshake Complete →
+            </button>
+          )}
         </div>
       </div>
     </>
