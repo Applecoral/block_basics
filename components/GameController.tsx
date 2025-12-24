@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import dynamic from "next/dynamic";
-import { FarcasterSDK } from "@farcaster/farcaster-sdk"; // make sure this is installed
+import { FrameSDK } from "@farcaster/frame-sdk"; // make sure this is installed
 
 const episodes = Array.from({ length: 30 }, (_, i) => {
   const chapter = i < 10 ? 1 : i < 20 ? 2 : 3;
