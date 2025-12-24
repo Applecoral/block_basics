@@ -9,6 +9,15 @@ export default function Episode14({ onComplete }: Props) {
   return (
     <div className="w-full h-full flex flex-col items-center justify-center p-6 bg-[#050505] text-white">
       <div className="bg-black/90 border-2 border-[#ff00ff] p-6 w-80 flex flex-col items-center shadow-[0_0_30px_rgba(255,0,255,0.2)] space-y-4">
+
+        {/* Episode Explainer */}
+        <p className="text-[#ff00ff] text-[10px] uppercase font-black tracking-widest text-center">
+          EPISODE 14: SOLIDITY LOGIC
+        </p>
+        <p className="text-white/50 text-[9px] text-center mb-4">
+          Smart contracts run on strict rules. Complete the subtraction in the transfer function correctly to ensure safe token transfer.
+        </p>
+
         <h2 className="text-[#ff00ff] text-xs uppercase font-black tracking-widest text-center">
           Compiler: Solidity 0.8.x
         </h2>
@@ -23,7 +32,7 @@ export default function Episode14({ onComplete }: Props) {
         <p className="text-white/40 text-[9px] text-center mb-4">
           {solved 
             ? "Compilation successful. Code is valid."
-            : "Smart contracts use strict logic. Which variable completes the subtraction? Click the correct block."}
+            : "Which variable completes the subtraction? Click the correct block."}
         </p>
 
         <div className="flex justify-between w-full">
