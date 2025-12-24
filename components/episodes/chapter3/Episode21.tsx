@@ -9,6 +9,15 @@ export default function Episode21({ onComplete }: Props) {
   return (
     <div className="w-full h-full flex flex-col items-center justify-center p-6 bg-[#050505] text-white">
       <div className="bg-black/90 border-2 border-[#00f2ff] p-6 w-80 flex flex-col items-center shadow-[0_0_30px_rgba(0,255,255,0.2)] space-y-4">
+
+        {/* Episode Explainer */}
+        <p className="text-[#00f2ff] text-[10px] uppercase font-black tracking-widest text-center">
+          EPISODE 21: OPTIMISTIC ROLLUP
+        </p>
+        <p className="text-white/50 text-[9px] text-center mb-4">
+          Layer 2 solutions reduce congestion on Ethereum. Click 'Rollup' to compress multiple transactions and scale the network efficiently.
+        </p>
+
         <h2 className="text-[#00f2ff] text-xs uppercase font-black tracking-widest text-center">
           Protocol: Optimistic Rollup
         </h2>
