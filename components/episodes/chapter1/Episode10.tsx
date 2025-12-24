@@ -3,41 +3,39 @@ import { useState } from "react";
 
 interface Props { onComplete: () => void; }
 
-export default function Episode10({ onComplete }) {
+export default function Episode10({ onComplete }: Props) {
   const [signed, setSigned] = useState(false);
 
   return (
-    <>
-      <a-entity>
-        <a-box 
-          position="0 1.5 -5" 
-          width="3" height="3" depth="3" 
-          color="#00f2ff" 
-          material="opacity: 0.3; transparent: true; wireframe: true"
-          animation="property: rotation; to: 0 360 0; loop: true; dur: 20000"
-        ></a-box>
-        
-        <a-text 
-          value={signed ? "CHAPTER 1 COMPLETE" : "GENESIS BLOCK #0"} 
-          position="0 1.5 -4.5" align="center" color="white" width="6"
-        ></a-text>
-      </a-entity>
-
-      <div className="flex flex-col items-center">
-        <p className="text-[#00f2ff] text-[10px] tracking-widest mb-2 uppercase font-bold">Status: Foundation Ready</p>
-        <p className="text-white text-[10px] text-center max-w-xs mb-4 uppercase opacity-70">
+    <div className="w-full h-full flex flex-col items-center justify-center p-6 bg-[#050505] text-white">
+      <div className="bg-black/90 border-2 border-[#00f2ff] p-6 w-80 flex flex-col items-center shadow-[0_0_30px_rgba(0,242,255,0.2)] space-y-4">
+        <h2 className="text-[#00f2ff] text-xs uppercase font-black tracking-widest">
+          FOUNDATION STATUS
+        </h2>
+        <p className="text-white/40 text-[9px] text-center mb-4">
           You have mastered Hashing, Linking, Nodes, and Keys. Sign the Genesis block to enter the world of Smart Contracts.
         </p>
+
         {!signed ? (
-          <button onClick={() => setSigned(true)} className="px-8 py-3 bg-[#ff00ff] text-white font-black text-xs uppercase tracking-widest shadow-[0_0_20px_#ff00ff]">
+          <button
+            onClick={() => setSigned(true)}
+            className="px-8 py-3 w-full bg-[#ff00ff] text-white font-black text-xs uppercase tracking-widest shadow-[0_0_20px_#ff00ff] hover:scale-105 transition-transform"
+          >
             Sign Genesis Block
           </button>
         ) : (
-          <button onClick={onComplete} className="px-8 py-3 bg-white text-black font-black text-xs uppercase tracking-widest">
-            Enter Chapter 2
+          <button
+            onClick={onComplete}
+            className="px-8 py-3 w-full bg-[#00ff00] text-black font-black text-xs uppercase tracking-widest shadow-[0_0_20px_#00ff00] hover:scale-105 transition-transform"
+          >
+            Enter Chapter 2 →
           </button>
         )}
+
+        <p className="text-[#00f2ff] text-[10px] uppercase font-bold tracking-widest mt-2">
+          {signed ? "GENESIS BLOCK SIGNED" : "GENESIS BLOCK #0"}
+        </p>
       </div>
-    </>
+    </div>
   );
 }
