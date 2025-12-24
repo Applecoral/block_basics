@@ -22,13 +22,22 @@ export default function Episode13({ onComplete }: Props) {
   return (
     <div className="w-full h-full flex flex-col items-center justify-center p-6 bg-[#050505] text-white">
       <div className="bg-black/90 border-2 border-[#00f2ff] p-6 w-80 flex flex-col items-center shadow-[0_0_30px_rgba(0,242,255,0.2)] space-y-4">
+
+        {/* Episode Explainer */}
+        <p className="text-[#00f2ff] text-[10px] uppercase font-black tracking-widest text-center">
+          EPISODE 13: EVM GLOBAL STATE
+        </p>
+        <p className="text-white/50 text-[9px] text-center mb-4">
+          The World Computer must reach consensus to update its global state. Click the cores in the correct order: 1, 2, 3. Correct sequence advances the chain.
+        </p>
+
         <h2 className="text-[#00f2ff] text-xs uppercase font-black tracking-widest text-center">
           PROTOCOL: EVM GLOBAL STATE
         </h2>
         <p className="text-white/40 text-[9px] text-center mb-4">
           {isCorrect
             ? "State transition confirmed by all nodes."
-            : "The World Computer must reach consensus. Click the Cores in order: 1, 2, 3."}
+            : "Click the Cores in order: 1, 2, 3 to achieve consensus."}
         </p>
 
         <div className="flex justify-between w-full">
