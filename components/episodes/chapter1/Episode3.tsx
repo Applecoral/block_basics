@@ -22,6 +22,15 @@ export default function Episode3({ onComplete }: Props) {
         className="bg-black/90 border-2 border-[#00f2ff] p-6 flex flex-col items-center shadow-[0_0_30px_rgba(0,242,255,0.2)] cursor-pointer active:scale-95 transition-transform"
         tabIndex={0}
       >
+        {/* Episode Explainer */}
+        <p className="text-[#00f2ff] text-[10px] tracking-widest mb-2 font-black uppercase text-center">
+          EPISODE 3: VALIDATE THE BLOCK
+        </p>
+        <p className="text-white/50 text-[9px] mb-6 text-center max-w-xs">
+          In this episode, you act as a miner. Adjust the Nonce value until it matches the network's target.
+          Once the correct Nonce is found, the block can be uploaded to the mainnet. This simulates proof-of-work.
+        </p>
+
         <h2 className="text-[#00f2ff] font-mono text-xs tracking-tighter mb-1">NODE_STATION_03</h2>
         <p className="text-white/40 text-[10px] uppercase mb-6 tracking-[0.2em]">Adjust Nonce to match Network Target</p>
 
