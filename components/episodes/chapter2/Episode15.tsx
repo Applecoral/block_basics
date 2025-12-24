@@ -3,49 +3,45 @@ import { useState } from "react";
 
 interface Props { onComplete: () => void; }
 
-export default function Episode15({ onComplete }) {
+export default function Episode15({ onComplete }: Props) {
   const [supply, setSupply] = useState(0);
   const target = 10;
 
   return (
-    <>
-      <a-entity>
-        {/* The Minting Press */}
-        <a-cylinder position="0 3 -4" radius="1" height="0.5" color="#111" material="metalness: 0.9">
-          <a-text value="ERC-20 FACTORY" position="0 0.3 0" align="center" width="4" color="#00f2ff"></a-text>
-        </a-cylinder>
+    <div className="w-full h-full flex flex-col items-center justify-center p-6 bg-[#050505] text-white">
+      <div className="bg-black/90 border-2 border-[#00f2ff] p-6 w-80 flex flex-col items-center shadow-[0_0_30px_rgba(0,242,255,0.2)] space-y-4">
+        <h2 className="text-[#00f2ff] text-xs uppercase font-black tracking-widest text-center">
+          Protocol: Fungible Asset
+        </h2>
 
-        {/* Generated Tokens */}
-        {Array.from({ length: supply }).map((_, i) => (
-          <a-box 
-            key={i}
-            position={`${(i % 5) - 2} ${Math.floor(i / 5) + 0.5} -4`} 
-            scale="0.4 0.4 0.4" 
-            color="#00f2ff"
-            animation="property: rotation; to: 0 360 0; loop: true; dur: 3000"
-          ></a-box>
-        ))}
-      </a-entity>
-
-      <div className="flex flex-col items-center">
-        <p className="text-[#00f2ff] text-[10px] tracking-widest mb-2 uppercase font-bold">Protocol: Fungible Asset</p>
-        <p className="text-white text-[10px] text-center max-w-xs mb-4 uppercase opacity-70">
-          {supply >= target ? "Total supply reached. Treasury full." : `ERC-20 tokens are identical. Mint ${target - supply} more to complete the batch.`}
+        <p className="text-white/40 text-[9px] text-center mb-4">
+          {supply >= target 
+            ? "Total supply reached. Treasury full." 
+            : `ERC-20 tokens are identical. Mint ${target - supply} more to complete the batch.`}
         </p>
-        
+
+        <div className="flex flex-wrap justify-center gap-2 w-full mb-4">
+          {Array.from({ length: supply }).map((_, i) => (
+            <div key={i} className="w-6 h-6 bg-[#00f2ff] rounded animate-spin"></div>
+          ))}
+        </div>
+
         {supply < target ? (
           <button 
             onClick={() => setSupply(s => s + 1)} 
-            className="px-6 py-2 border-2 border-[#00f2ff] text-[#00f2ff] font-bold text-[10px] uppercase shadow-[0_0_10px_#00f2ff]"
+            className="px-6 py-2 border-2 border-[#00f2ff] text-[#00f2ff] font-bold text-[10px] uppercase shadow-[0_0_10px_#00f2ff] hover:scale-105 transition-transform"
           >
             Mint Token
           </button>
         ) : (
-          <button onClick={onComplete} className="px-6 py-2 bg-[#ff00ff] text-white font-black text-[10px] uppercase shadow-[0_0_15px_#ff00ff]">
+          <button 
+            onClick={onComplete} 
+            className="px-6 py-2 bg-[#ff00ff] text-white font-black text-[10px] uppercase shadow-[0_0_15px_#ff00ff] hover:scale-105 transition-transform"
+          >
             Finalize Supply
           </button>
         )}
       </div>
-    </>
+    </div>
   );
 }
