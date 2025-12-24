@@ -3,45 +3,43 @@ import { useState } from "react";
 
 interface Props { onComplete: () => void; }
 
-export default function Episode27({ onComplete }) {
+export default function Episode27({ onComplete }: Props) {
   const [isProven, setIsProven] = useState(false);
 
   return (
-    <>
-      <a-entity>
-        {/* The Privacy Gate */}
-        <a-torus-knot 
-          position="0 2 -4" 
-          radius="0.7" 
-          tube="0.05" 
-          color={isProven ? "#00ff00" : "#555"}
-          animation={isProven ? "property: rotation; to: 0 360 0; dur: 5000; loop: true" : ""}
-        ></a-torus-knot>
+    <div className="flex flex-col items-center mt-10">
+      <h2 className="text-[#00f2ff] text-sm font-bold uppercase mb-4 text-center">Protocol: Zero Knowledge</h2>
 
-        {/* The Data Packets */}
-        {!isProven && (
-          <>
-            <a-box position="-1.5 0.5 -2" scale="0.3 0.3 0.3" color="red" onClick={() => alert("Exposed! You revealed your private data.")}>
-              <a-text value="RAW DATA" align="center" position="0 0.5 0" width="3"></a-text>
-            </a-box>
-            <a-box position="1.5 0.5 -2" scale="0.3 0.3 0.3" color="#00f2ff" onClick={() => setIsProven(true)}>
-              <a-text value="ZK-PROOF" align="center" position="0 0.5 0" width="3"></a-text>
-            </a-box>
-          </>
-        )}
-      </a-entity>
+      <p className="text-white text-[10px] text-center max-w-xs mb-4 uppercase opacity-70">
+        {isProven
+          ? "Verification successful. Privacy preserved."
+          : "The gate requires proof of age. Use a ZK-Proof to verify without revealing your birthday."}
+      </p>
 
-      <div className="flex flex-col items-center">
-        <p className="text-[#00f2ff] text-[10px] tracking-widest mb-2 uppercase font-bold text-center">Protocol: Zero Knowledge</p>
-        <p className="text-white text-[10px] text-center max-w-xs mb-4 uppercase opacity-70">
-          {isProven ? "Verification successful. Privacy preserved." : "The gate requires proof of age. Use a ZK-Proof to verify without revealing your birthday."}
-        </p>
-        {isProven && (
-          <button onClick={onComplete} className="px-6 py-2 bg-[#00ff00] text-black font-black text-[10px] uppercase shadow-[0_0_15px_#00ff00]">
-            Pass Through Gate
+      {!isProven ? (
+        <div className="flex gap-4 mb-4">
+          <button
+            onClick={() => alert("Exposed! You revealed your private data.")}
+            className="px-4 py-2 border-2 border-red-500 text-red-500 font-bold text-[10px] uppercase"
+          >
+            RAW DATA
           </button>
-        )}
-      </div>
-    </>
+
+          <button
+            onClick={() => setIsProven(true)}
+            className="px-4 py-2 border-2 border-[#00f2ff] text-[#00f2ff] font-bold text-[10px] uppercase"
+          >
+            ZK-PROOF
+          </button>
+        </div>
+      ) : (
+        <button
+          onClick={onComplete}
+          className="px-6 py-2 bg-[#00ff00] text-black font-black text-[10px] uppercase shadow-[0_0_15px_#00ff00]"
+        >
+          Pass Through Gate
+        </button>
+      )}
+    </div>
   );
 }
