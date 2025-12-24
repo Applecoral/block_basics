@@ -16,6 +16,15 @@ export default function Episode16({ onComplete }: Props) {
   return (
     <div className="w-full h-full flex flex-col items-center justify-center p-6 bg-[#050505] text-white">
       <div className="bg-black/90 border-2 border-[#ff00ff] p-6 w-80 flex flex-col items-center shadow-[0_0_30px_rgba(255,0,255,0.2)] space-y-4">
+
+        {/* Episode Explainer */}
+        <p className="text-[#ff00ff] text-[10px] uppercase font-black tracking-widest text-center">
+          EPISODE 16: NON-FUNGIBLE METADATA
+        </p>
+        <p className="text-white/50 text-[9px] text-center mb-4">
+          NFTs have unique metadata that describes them. Match the NFT to the description provided to verify its identity.
+        </p>
+
         <h2 className="text-[#ff00ff] text-xs uppercase font-black tracking-widest text-center">
           Protocol: Non-Fungible Metadata
         </h2>
@@ -44,7 +53,7 @@ export default function Episode16({ onComplete }: Props) {
             ID Verified: Proceed
           </button>
         )}
-        {selectedID !== null && selectedID !== correctID && selectedID !== correctID && (
+        {selectedID !== null && selectedID !== correctID && (
           <p className="text-red-500 text-[10px] uppercase font-bold">Metadata Mismatch. Try again.</p>
         )}
       </div>
