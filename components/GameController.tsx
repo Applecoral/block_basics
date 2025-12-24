@@ -18,30 +18,12 @@ export default function GameController() {
 
   useEffect(() => {
     setMounted(true);
-    
+
     const saved = localStorage.getItem("on_chain_journey_progress");
     if (saved) {
       setHasSavedProgress(true);
       setCurrentStep(parseInt(saved, 10));
     }
-
-    const script = document.createElement("script");
-    script.src = "https://aframe.io/releases/1.6.0/aframe.min.js";
-    script.onload = () => {
-      // Register a simple component to ensure clicks work properly in VR/3D
-      if (typeof window !== "undefined" && (window as any).AFRAME) {
-        if (!(window as any).AFRAME.components['cursor-listener']) {
-          (window as any).AFRAME.registerComponent('cursor-listener', {
-            init: function () {
-              this.el.addEventListener('click', function (evt: any) {
-                // This helps A-Frame sync with standard DOM events
-              });
-            }
-          });
-        }
-      }
-    };
-    document.head.appendChild(script);
   }, []);
 
   useEffect(() => {
@@ -59,87 +41,67 @@ export default function GameController() {
   if (!mounted) return null;
 
   const ActiveEpisode = episodes[currentStep];
-  const chapterNumber = currentStep < 10 ? 1 : currentStep < 20 ? 2 : 3;
 
   return (
-    <div className="relative w-full h-screen bg-[#050505] overflow-hidden font-mono text-white">
+    <div className="relative w-full h-screen bg-[#050505] text-white font-mono flex flex-col items-center justify-center p-6">
       {!gameStarted ? (
-        <div className="absolute inset-0 z-50 flex flex-col items-center justify-center bg-black p-6 text-center">
-          <div className="mb-8 text-center">
-            <h1 className="text-4xl font-black tracking-[0.2em] text-[#00f2ff] mb-2">ON-CHAIN</h1>
-            <h2 className="text-xl tracking-[0.5em] text-[#ff00ff] uppercase opacity-80">30 Day Journey</h2>
-          </div>
-          
-          <div className="max-w-md space-y-4 mb-12 opacity-60 text-[10px] uppercase leading-relaxed tracking-widest">
-            <p>Master the protocols of the new internet.</p>
-            <p>3 Chapters. 30 Challenges. Full Sovereignty.</p>
-          </div>
+        <div className="text-center">
+          <h1 className="text-4xl font-black text-[#00f2ff] mb-2 tracking-[0.2em]">ON-CHAIN</h1>
+          <h2 className="text-xl text-[#ff00ff] uppercase opacity-80 tracking-[0.5em] mb-6">30 Day Journey</h2>
+          <p className="text-[10px] opacity-60 mb-4">Master the protocols of the new internet.</p>
+          <p className="text-[10px] opacity-60 mb-8">3 Chapters. 30 Challenges. Full Sovereignty.</p>
 
-          <div className="flex flex-col gap-4">
-            {hasSavedProgress ? (
-              <>
-                <button 
-                  onClick={() => setGameStarted(true)}
-                  className="px-12 py-4 bg-[#00f2ff] text-black hover:bg-white transition-all duration-300 font-bold uppercase tracking-widest text-sm shadow-[0_0_20px_rgba(0,242,255,0.4)]"
-                >
-                  Resume Protocol (Day {currentStep + 1})
-                </button>
-                <button 
-                  onClick={startNewGame}
-                  className="text-[9px] uppercase tracking-[0.3em] text-white/30 hover:text-red-500 transition-colors"
-                >
-                  Wipe Data & Restart
-                </button>
-              </>
-            ) : (
-              <button 
+          {hasSavedProgress ? (
+            <>
+              <button
                 onClick={() => setGameStarted(true)}
-                className="px-12 py-4 border-2 border-[#00f2ff] text-[#00f2ff] hover:bg-[#00f2ff] hover:text-black transition-all duration-300 font-bold uppercase tracking-widest text-sm"
+                className="px-12 py-4 bg-[#00f2ff] text-black font-bold uppercase tracking-widest mb-2"
               >
-                Initialize Protocol
+                Resume Protocol (Day {currentStep + 1})
               </button>
-            )}
-          </div>
+              <button
+                onClick={startNewGame}
+                className="text-[9px] uppercase tracking-[0.3em] text-white/30 hover:text-red-500 transition-colors"
+              >
+                Wipe Data & Restart
+              </button>
+            </>
+          ) : (
+            <button
+              onClick={() => setGameStarted(true)}
+              className="px-12 py-4 border-2 border-[#00f2ff] text-[#00f2ff] font-bold uppercase tracking-widest"
+            >
+              Initialize Protocol
+            </button>
+          )}
         </div>
       ) : (
-        <a-scene embedded vr-mode-ui="enabled: false" inspector="url: false cursor: false">
-          <a-sky color="#050505"></a-sky>
-          <a-grid position="0 0 0" rotation="-90 0 0" width="100" height="100" color="#111" opacity="0.3"></a-grid>
-          
+        <div className="w-full max-w-xl flex flex-col items-center gap-6">
           <ActiveEpisode onComplete={() => setCurrentStep(s => Math.min(s + 1, 29))} />
-          
-          <a-entity camera position="0 1.6 0" look-controls wasd-controls>
-            {/* The Invisible Raycaster that follows your mouse/touch */}
-            <a-entity
-              cursor="rayOrigin: mouse"
-              raycaster="objects: .clickable, [onClick]; far: 50; interval: 100"
-            ></a-entity>
-          </a-entity>
-        </a-scene>
-      )}
 
-      {/* Persistence UI Layer */}
-      {gameStarted && (
-        <div className="absolute inset-0 pointer-events-none flex flex-col justify-between p-6 z-10">
-          <div className="flex justify-between items-start">
-            <div>
-              <h1 className="text-[#00f2ff] text-xl font-black tracking-tighter">ON-CHAIN JOURNEY</h1>
-              <div className="flex items-center gap-2">
-                <p className="text-[#ff00ff] text-[10px] tracking-widest uppercase opacity-70">Day {currentStep + 1} • Chapter {chapterNumber}</p>
-                <span className="text-[8px] text-white/20">|</span>
-                <span className="text-[8px] text-white/40 animate-pulse uppercase">Saving_Progress...</span>
-              </div>
-            </div>
-          </div>
+          <div className="flex justify-between w-full mt-8">
+            <button
+              onClick={() => setCurrentStep(s => Math.max(0, s - 1))}
+              className="text-white/30 hover:text-white text-[10px] uppercase px-4 py-2"
+            >
+              Back
+            </button>
 
-          <div className="flex justify-between items-center pointer-events-auto w-full max-w-2xl mx-auto">
-            <button onClick={() => setCurrentStep(s => Math.max(0, s - 1))} className="text-white/20 hover:text-white text-[10px] uppercase p-4">Back</button>
-            <div className="flex gap-1 overflow-hidden px-4">
+            <div className="flex gap-1 items-center">
               {Array.from({ length: 30 }).map((_, i) => (
-                <div key={i} className={`h-1 transition-all duration-500 ${i === currentStep ? 'bg-[#00f2ff] w-6' : i < currentStep ? 'bg-[#ff00ff] w-2' : 'bg-white/10 w-2'}`}></div>
+                <div
+                  key={i}
+                  className={`h-1 transition-all duration-500 ${i === currentStep ? 'bg-[#00f2ff] w-6' : i < currentStep ? 'bg-[#ff00ff] w-2' : 'bg-white/10 w-2'}`}
+                />
               ))}
             </div>
-            <button onClick={() => setCurrentStep(s => Math.min(29, s + 1))} className="text-white/20 hover:text-white text-[10px] uppercase p-4">Next</button>
+
+            <button
+              onClick={() => setCurrentStep(s => Math.min(29, s + 1))}
+              className="text-white/30 hover:text-white text-[10px] uppercase px-4 py-2"
+            >
+              Next
+            </button>
           </div>
         </div>
       )}
