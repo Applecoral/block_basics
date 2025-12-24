@@ -10,7 +10,7 @@ export default function Episode4({ onComplete }: Props) {
 
   const handleNodeClick = (id: number) => {
     if (isComplete) return;
-    // Reset if clicking an already active node, otherwise add to path
+    // Simple logic: If it's already in the path, clear all. Otherwise, add it.
     if (activeRoute.includes(id)) {
       setActiveRoute([]);
     } else {
@@ -20,118 +20,83 @@ export default function Episode4({ onComplete }: Props) {
 
   return (
     <>
+      {/* 3D SCENE CONTENT */}
       <a-entity>
-        {/* Environment */}
-        <a-plane rotation="-90 0 0" width="100" height="100" color="#020202"></a-plane>
-        <a-light type="ambient" color="#222"></a-light>
-        <a-light type="point" position="0 5 -5" intensity="0.8" color="#00f2ff"></a-light>
+        {/* Floor Grid - Purely visual */}
+        <a-grid position="0 0 0" rotation="-90 0 0" width="100" height="100" color="#111" opacity="0.2"></a-grid>
 
-        {/* Central Uplink Tower */}
-        <a-entity position="0 0 -8">
-          <a-box scale="1.2 5 1.2" material="color: #0a0a0a; metalness: 0.9; roughness: 0.1">
-            <a-box 
-              scale="0.6 0.2 0.6" 
-              position="0 2 0.35" 
-              material={`color: ${isComplete ? '#00f2ff' : '#ff00ff'}; emissive: ${isComplete ? '#00f2ff' : '#ff00ff'}; emissiveIntensity: 2`}
-              animation="property: opacity; from: 1; to: 0.3; dir: alternate; loop: true; dur: 800"
-            ></a-box>
-          </a-box>
-          <a-text value="CORE_UPLINK" position="0 3 0.7" align="center" width="4" font="mozillavr" color={isComplete ? "#00f2ff" : "#ff00ff"}></a-text>
+        {/* Central Data Hub */}
+        <a-entity position="0 2 -6">
+          <a-sphere radius="0.3" material={`shader: flat; color: ${isComplete ? '#00f2ff' : '#222'}; opacity: 0.8`}>
+            <a-light type="point" intensity={isComplete ? 2 : 0.5} color="#00f2ff"></a-light>
+          </a-sphere>
+          <a-ring radius-inner="0.4" radius-outer="0.45" rotation="90 0 0" color="#00f2ff" animation="property: rotation; to: 90 360 0; loop: true; dur: 4000; easing: linear"></a-ring>
+          <a-text value={isComplete ? "SIGNAL_LOCKED" : "UPLINK_OFFLINE"} position="0 0.8 0" align="center" width="4" font="mozillavr"></a-text>
         </a-entity>
 
-        {/* Server Station ALPHA (Node 1) */}
-        <a-entity 
-          class="clickable" 
-          position="-4 0 -5" 
-          onClick={() => handleNodeClick(1)}
-        >
-          <a-box 
-            scale="1 3 1" 
-            material={`color: ${activeRoute.includes(1) ? '#00f2ff' : '#111'}; emissive: ${activeRoute.includes(1) ? '#00f2ff' : '#000'}; emissiveIntensity: 0.5; metalness: 0.8`}
-          >
-            <a-text value="ALPHA" position="0 1.8 0.51" align="center" width="3" color="#fff"></a-text>
-            <a-rect width="0.8" height="0.05" position="0 1 0.52" material={`color: ${activeRoute.includes(1) ? '#fff' : '#00f2ff'}; emissive: #00f2ff`}></a-rect>
-          </a-box>
+        {/* INTERACTIVE NODES (Stations) */}
+        {/* ALPHA Station */}
+        <a-entity position="-3 1.5 -4" class="clickable" onClick={() => handleNodeClick(1)}>
+          <a-octahedron radius="0.4" material={`shader: flat; color: ${activeRoute.includes(1) ? '#00f2ff' : '#333'}; wireframe: true`}>
+            <a-text value="STATION_A" position="0 -0.7 0" align="center" width="3"></a-text>
+          </a-octahedron>
+          {/* Decorative rotating ring */}
+          <a-ring radius-inner="0.5" radius-outer="0.52" color="#00f2ff" opacity="0.3" animation="property: rotation; to: 0 0 360; loop: true; dur: 3000"></a-ring>
         </a-entity>
 
-        {/* Server Station BETA (Node 2) */}
-        <a-entity 
-          class="clickable" 
-          position="0 0 -4" 
-          onClick={() => handleNodeClick(2)}
-        >
-          <a-box 
-            scale="1 3 1" 
-            material={`color: ${activeRoute.includes(2) ? '#00f2ff' : '#111'}; emissive: ${activeRoute.includes(2) ? '#00f2ff' : '#000'}; emissiveIntensity: 0.5; metalness: 0.8`}
-          >
-            <a-text value="BETA" position="0 1.8 0.51" align="center" width="3" color="#fff"></a-text>
-            <a-rect width="0.8" height="0.05" position="0 1 0.52" material={`color: ${activeRoute.includes(2) ? '#fff' : '#00f2ff'}; emissive: #00f2ff`}></a-rect>
-          </a-box>
+        {/* BETA Station */}
+        <a-entity position="0 1.5 -4" class="clickable" onClick={() => handleNodeClick(2)}>
+          <a-octahedron radius="0.4" material={`shader: flat; color: ${activeRoute.includes(2) ? '#00f2ff' : '#333'}; wireframe: true`}>
+            <a-text value="STATION_B" position="0 -0.7 0" align="center" width="3"></a-text>
+          </a-octahedron>
+          <a-ring radius-inner="0.5" radius-outer="0.52" color="#00f2ff" opacity="0.3" animation="property: rotation; to: 360 0 0; loop: true; dur: 3000"></a-ring>
         </a-entity>
 
-        {/* Server Station GAMMA (Node 3) */}
-        <a-entity 
-          class="clickable" 
-          position="4 0 -5" 
-          onClick={() => handleNodeClick(3)}
-        >
-          <a-box 
-            scale="1 3 1" 
-            material={`color: ${activeRoute.includes(3) ? '#00f2ff' : '#111'}; emissive: ${activeRoute.includes(3) ? '#00f2ff' : '#000'}; emissiveIntensity: 0.5; metalness: 0.8`}
-          >
-            <a-text value="GAMMA" position="0 1.8 0.51" align="center" width="3" color="#fff"></a-text>
-            <a-rect width="0.8" height="0.05" position="0 1 0.52" material={`color: ${activeRoute.includes(3) ? '#fff' : '#00f2ff'}; emissive: #00f2ff`}></a-rect>
-          </a-box>
+        {/* GAMMA Station */}
+        <a-entity position="3 1.5 -4" class="clickable" onClick={() => handleNodeClick(3)}>
+          <a-octahedron radius="0.4" material={`shader: flat; color: ${activeRoute.includes(3) ? '#00f2ff' : '#333'}; wireframe: true`}>
+            <a-text value="STATION_C" position="0 -0.7 0" align="center" width="3"></a-text>
+          </a-octahedron>
+          <a-ring radius-inner="0.5" radius-outer="0.52" color="#00f2ff" opacity="0.3" animation="property: rotation; to: 0 360 0; loop: true; dur: 3000"></a-ring>
         </a-entity>
 
-        {/* Connection Flux Lines */}
+        {/* LIGHT BRIDGES (Connecting Nodes) */}
         {activeRoute.map((nodeId, idx) => {
           if (idx === 0) return null;
           const prev = activeRoute[idx - 1];
-          const posMap: any = { 1: "-4 1.5 -5", 2: "0 1.5 -4", 3: "4 1.5 -5" };
+          const posMap: any = { 1: "-3 1.5 -4", 2: "0 1.5 -4", 3: "3 1.5 -4" };
           return (
             <a-entity 
               key={idx} 
-              line={`start: ${posMap[prev]}; end: ${posMap[nodeId]}; color: #00f2ff`}
-              animation="property: components.line.material.opacity; from: 0.1; to: 1; dir: alternate; loop: true; dur: 400"
+              line={`start: ${posMap[prev]}; end: ${posMap[nodeId]}; color: #00f2ff; opacity: 1`}
             ></a-entity>
           );
         })}
       </a-entity>
 
-      {/* 2D HUD */}
-      <div className="fixed inset-0 z-[100] flex flex-col items-center justify-end pb-12 pointer-events-none">
-        <div className="pointer-events-auto bg-[#050505]/95 border-b-4 border-[#00f2ff] p-6 w-80 shadow-[0_20px_50px_rgba(0,242,255,0.2)] backdrop-blur-md">
-          <div className="flex justify-between items-center mb-4">
-            <div>
-              <p className="text-[#00f2ff] text-[10px] tracking-[0.3em] font-black uppercase">P2P_ROUTING_OVERRIDE</p>
-              <p className="text-white/20 text-[8px] font-mono">CURSOR: ACTIVE</p>
-            </div>
-            <div className="flex gap-1">
-               {[1,2,3].map(i => (
-                 <div key={i} className={`w-1.5 h-1.5 rotate-45 transition-all duration-300 ${activeRoute.length >= i ? 'bg-[#00f2ff] shadow-[0_0_8px_#00f2ff]' : 'bg-white/10'}`} />
-               ))}
-            </div>
-          </div>
-          
-          <p className="text-white/50 text-[10px] uppercase leading-relaxed mb-6 font-mono">
-            Packet sequence corruption detected. <br/>
-            Bridge servers: <span className="text-white font-bold tracking-widest">A → B → C</span>
+      {/* 2D HUD OVERLAY */}
+      <div className="fixed inset-0 z-[100] flex flex-col items-center justify-end pb-10 pointer-events-none">
+        <div className="pointer-events-auto bg-black/80 border border-[#00f2ff]/30 backdrop-blur-md p-6 w-72 text-center">
+          <p className="text-[#00f2ff] text-[10px] tracking-[0.4em] mb-2 font-black">PROTOCOL_04</p>
+          <p className="text-white/40 text-[9px] uppercase mb-6 tracking-widest">
+            Establish Peer-to-Peer Relay:<br/>
+            <span className="text-white">A → B → C</span>
           </p>
-          
+
           {!isComplete ? (
-            <button 
-              onClick={() => setActiveRoute([])}
-              className="w-full text-[#ff00ff] text-[9px] uppercase tracking-widest py-3 border border-[#ff00ff]/30 hover:bg-[#ff00ff]/10 transition-all font-bold"
-            >
-              Reset Signal Path
-            </button>
+            <div className="h-10 flex items-center justify-center">
+               <div className="flex gap-2">
+                  {requiredRoute.map((_, i) => (
+                    <div key={i} className={`w-2 h-2 rounded-full ${activeRoute.length > i ? 'bg-[#00f2ff] shadow-[0_0_10px_#00f2ff]' : 'bg-white/10'}`}></div>
+                  ))}
+               </div>
+            </div>
           ) : (
             <button 
-              onClick={onComplete} 
-              className="w-full py-4 bg-[#00f2ff] text-black font-black text-xs uppercase tracking-[0.2em] shadow-[0_0_30px_rgba(0,242,255,0.6)] animate-pulse"
+              onClick={onComplete}
+              className="w-full py-3 bg-[#00f2ff] text-black font-bold text-[10px] uppercase tracking-widest hover:bg-white transition-colors cursor-pointer"
             >
-              Uplink Established →
+              Verify Connection
             </button>
           )}
         </div>
