@@ -20,38 +20,40 @@ export default function Episode13({ onComplete }: Props) {
   };
 
   return (
-    <>
-      <a-entity>
-        {/* EVM Cores */}
-        {[ -1.5, 0, 1.5 ].map((x, i) => (
-          <a-torus 
-            key={i}
-            position={`${x} 1.5 -4`} 
-            radius="0.4" 
-            tube="0.05" 
-            color={sequence.includes(i) ? "#00ff00" : "#00f2ff"}
-            onClick={() => addStep(i)}
-            animation={`property: rotation; to: 0 360 0; dur: ${2000 - (i * 500)}; loop: true; easing: linear`}
-          >
-            <a-text value={`${i + 1}`} position="0 0 0.2" align="center" color="white"></a-text>
-          </a-torus>
-        ))}
-        
-        <a-text 
-          value={isCorrect ? "EXECUTION SYNCED" : "SYNCHRONIZE CORES"} 
-          position="0 2.8 -4" align="center" color={isCorrect ? "#00ff00" : "#ff00ff"} width="4"
-        ></a-text>
-      </a-entity>
-
-      <div className="flex flex-col items-center">
-        <p className="text-[#00f2ff] text-[10px] tracking-widest mb-2 uppercase font-bold">Protocol: EVM Global State</p>
-        <p className="text-white text-[10px] text-center max-w-xs mb-4 uppercase opacity-70">
-          {isCorrect ? "State transition confirmed by all nodes." : "The World Computer must reach consensus. Click the Cores in order: 1, 2, 3."}
+    <div className="w-full h-full flex flex-col items-center justify-center p-6 bg-[#050505] text-white">
+      <div className="bg-black/90 border-2 border-[#00f2ff] p-6 w-80 flex flex-col items-center shadow-[0_0_30px_rgba(0,242,255,0.2)] space-y-4">
+        <h2 className="text-[#00f2ff] text-xs uppercase font-black tracking-widest text-center">
+          PROTOCOL: EVM GLOBAL STATE
+        </h2>
+        <p className="text-white/40 text-[9px] text-center mb-4">
+          {isCorrect
+            ? "State transition confirmed by all nodes."
+            : "The World Computer must reach consensus. Click the Cores in order: 1, 2, 3."}
         </p>
+
+        <div className="flex justify-between w-full">
+          {[0, 1, 2].map(i => (
+            <button
+              key={i}
+              onClick={() => addStep(i)}
+              className={`w-16 h-16 rounded-full text-white font-bold text-xl 
+                ${sequence.includes(i) ? "bg-[#00ff00]" : "bg-[#00f2ff]"} 
+                hover:scale-105 transition-transform`}
+            >
+              {i + 1}
+            </button>
+          ))}
+        </div>
+
         {isCorrect && (
-          <div className="text-[#00ff00] font-mono text-xs animate-bounce">CONSTRUCTING NEXT STATE...</div>
+          <button
+            onClick={onComplete}
+            className="mt-4 px-6 py-3 bg-[#00ff00] text-black font-black text-xs uppercase tracking-widest shadow-[0_0_15px_#00ff00]"
+          >
+            Construct Next State →
+          </button>
         )}
       </div>
-    </>
+    </div>
   );
 }
