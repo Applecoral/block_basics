@@ -10,6 +10,15 @@ export default function Episode19({ onComplete }: Props) {
   return (
     <div className="w-full h-full flex flex-col items-center justify-center p-6 bg-[#050505] text-white">
       <div className="bg-black/90 border-2 border-[#00f2ff] p-6 w-80 flex flex-col items-center shadow-[0_0_30px_rgba(0,255,255,0.2)] space-y-4">
+
+        {/* Episode Explainer */}
+        <p className="text-[#00f2ff] text-[10px] uppercase font-black tracking-widest text-center">
+          EPISODE 19: DAO GOVERNANCE
+        </p>
+        <p className="text-white/50 text-[9px] text-center mb-4">
+          Decentralized Autonomous Organizations rely on voting. Cast your governance token to approve the proposal. When quorum is reached, it executes automatically.
+        </p>
+
         <h2 className="text-[#00f2ff] text-xs uppercase font-black tracking-widest text-center">
           Protocol: DAO Governance
         </h2>
