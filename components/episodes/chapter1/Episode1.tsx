@@ -41,7 +41,7 @@ export default function Episode1({ onComplete }: Props) {
         {/* Hint added here */}
         {!isSolved && (
           <p className="text-[10px] text-[#ff00ff]/60 mt-2 uppercase tracking-[0.2em]">
-            Hint: It’s the first word in “genesis block”
+            Hint: It’s the first word in “blockchain”
           </p>
         )}
 
