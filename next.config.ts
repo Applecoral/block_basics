@@ -6,10 +6,7 @@ const nextConfig: NextConfig = {
     // This is the specific fix for the A-Frame "a-scene" errors
     ignoreBuildErrors: true,
   },
-  eslint: {
-    // This prevents linting warnings from stopping your deployment
-    ignoreDuringBuilds: true,
-  },
+  // Removed `eslint` key because it is no longer supported
 };
 
 export default nextConfig;
