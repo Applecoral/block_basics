@@ -3,41 +3,30 @@ import { useState } from "react";
 
 interface Props { onComplete: () => void; }
 
-export default function Episode22({ onComplete }) {
+export default function Episode22({ onComplete }: Props) {
   const [progress, setProgress] = useState(0);
   const isBridged = progress >= 100;
 
   return (
-    <>
-      <a-entity>
-        {/* Island 1: Mainnet */}
-        <a-cylinder position="-3 0 -5" radius="1.5" height="0.2" color="#333">
-          <a-text value="MAINNET" position="0 0.2 0" align="center" width="3" color="#ff00ff"></a-text>
-        </a-cylinder>
+    <div className="w-full h-full flex flex-col items-center justify-center p-6 bg-[#050505] text-white">
+      <div className="bg-black/90 border-2 border-[#ff00ff] p-6 w-80 flex flex-col items-center shadow-[0_0_30px_rgba(255,0,255,0.2)] space-y-4">
+        <h2 className="text-[#ff00ff] text-xs uppercase font-black tracking-widest text-center">
+          Protocol: Cross-Chain Bridge
+        </h2>
 
-        {/* Island 2: Layer 2 */}
-        <a-cylinder position="3 0 -5" radius="1.5" height="0.2" color="#333">
-          <a-text value="LAYER 2" position="0 0.2 0" align="center" width="3" color="#00f2ff"></a-text>
-        </a-cylinder>
-
-        {/* The Asset */}
-        <a-sphere 
-          position={`${-3 + (progress / 100) * 6} 1.5 -5`} 
-          radius="0.4" 
-          color="#FFD700"
-          animation="property: rotation; to: 0 360 0; loop: true; dur: 2000"
-        ></a-sphere>
-
-        {/* The Bridge Path */}
-        <a-entity line={`start: -3 1.5 -5; end: 3 1.5 -5; color: #00f2ff; opacity: ${progress/100}`}></a-entity>
-      </a-entity>
-
-      <div className="flex flex-col items-center">
-        <p className="text-[#ff00ff] text-[10px] tracking-widest mb-2 uppercase font-bold text-center">Protocol: Cross-Chain Bridge</p>
-        <p className="text-white text-[10px] text-center max-w-xs mb-4 uppercase opacity-70">
-          {isBridged ? "Asset locked on Mainnet. Minted on L2." : "Hold the button to verify the bridge and move your asset to the faster chain."}
+        <p className="text-white/40 text-[9px] text-center mb-4">
+          {isBridged 
+            ? "Asset locked on Mainnet. Minted on L2." 
+            : "Hold the button to verify the bridge and move your asset to the faster chain."}
         </p>
-        
+
+        <div className="w-full h-2 bg-white/10 rounded-full overflow-hidden mb-2">
+          <div 
+            className="h-full bg-[#00f2ff] transition-all duration-100"
+            style={{ width: `${progress}%` }}
+          ></div>
+        </div>
+
         {!isBridged ? (
           <button 
             onMouseDown={() => {
@@ -48,16 +37,19 @@ export default function Episode22({ onComplete }) {
                 });
               }, 30);
             }}
-            className="px-6 py-2 border-2 border-[#ff00ff] text-[#ff00ff] font-bold text-[10px] uppercase animate-pulse"
+            className="px-6 py-2 border-2 border-[#ff00ff] text-[#ff00ff] font-bold text-[10px] uppercase w-full animate-pulse"
           >
             Initiate Bridge
           </button>
         ) : (
-          <button onClick={onComplete} className="px-6 py-2 bg-[#00ff00] text-black font-black text-[10px] uppercase shadow-[0_0_15px_#00ff00]">
+          <button 
+            onClick={onComplete} 
+            className="px-6 py-2 bg-[#00ff00] text-black font-black text-[10px] uppercase w-full shadow-[0_0_15px_#00ff00]"
+          >
             Arrive at Destination
           </button>
         )}
       </div>
-    </>
+    </div>
   );
 }
