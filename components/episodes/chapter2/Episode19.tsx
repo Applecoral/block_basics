@@ -8,36 +8,50 @@ export default function Episode19({ onComplete }: Props) {
   const threshold = 5;
 
   return (
-    <>
-      <a-entity>
-        <a-text value="PROPOSAL: UPGRADE PROTOCOL?" position="0 3 -4" align="center" color="#00f2ff" width="4"></a-text>
-        
-        {/* Voting Pillars */}
-        <a-box position="-1.5 0.5 -3" width="1" height="1" color="#ff00ff" onClick={() => alert("Vote recorded: NO")}>
-          <a-text value="NO" position="0 0.6 0" align="center" width="4"></a-text>
-        </a-box>
+    <div className="w-full h-full flex flex-col items-center justify-center p-6 bg-[#050505] text-white">
+      <div className="bg-black/90 border-2 border-[#00f2ff] p-6 w-80 flex flex-col items-center shadow-[0_0_30px_rgba(0,255,255,0.2)] space-y-4">
+        <h2 className="text-[#00f2ff] text-xs uppercase font-black tracking-widest text-center">
+          Protocol: DAO Governance
+        </h2>
 
-        <a-box position="1.5 0.5 -3" width="1" height="1" color="#00ff00" onClick={() => setVotes(prev => Math.min(prev + 1, threshold))}>
-          <a-text value="YES" position="0 0.6 0" align="center" width="4"></a-text>
-        </a-box>
-
-        {/* Voting Progress Stack */}
-        {Array.from({ length: votes }).map((_, i) => (
-          <a-box key={i} position={`1.5 ${1.2 + (i * 0.4)} -3`} scale="0.8 0.3 0.8" color="#00ff00" material="opacity: 0.8"></a-box>
-        ))}
-      </a-entity>
-
-      <div className="flex flex-col items-center">
-        <p className="text-[#00f2ff] text-[10px] tracking-widest mb-2 uppercase font-bold text-center">Protocol: DAO Governance</p>
-        <p className="text-white text-[10px] text-center max-w-xs mb-4 uppercase opacity-70">
-          {votes >= threshold ? "Quorum reached. Proposal passed." : `Cast your governance tokens for 'YES'. Need ${threshold - votes} more to reach Quorum.`}
+        <p className="text-white/40 text-[9px] text-center mb-4">
+          {votes >= threshold 
+            ? "Quorum reached. Proposal passed." 
+            : `Cast your governance tokens for 'YES'. Need ${threshold - votes} more to reach Quorum.`}
         </p>
+
+        <div className="flex justify-between w-full px-4 mb-4">
+          <button 
+            onClick={() => alert("Vote recorded: NO")} 
+            className="px-6 py-2 bg-[#ff00ff] text-white font-bold text-[10px] uppercase w-1/2 mr-2"
+          >
+            NO
+          </button>
+          <button 
+            onClick={() => setVotes(prev => Math.min(prev + 1, threshold))} 
+            className="px-6 py-2 bg-[#00ff00] text-black font-bold text-[10px] uppercase w-1/2 ml-2"
+          >
+            YES
+          </button>
+        </div>
+
+        {/* Voting Progress Bar */}
+        <div className="w-full h-2 bg-white/10 rounded-full overflow-hidden">
+          <div 
+            className="h-full bg-[#00ff00] transition-all duration-200" 
+            style={{ width: `${(votes / threshold) * 100}%` }}
+          ></div>
+        </div>
+
         {votes >= threshold && (
-          <button onClick={onComplete} className="px-6 py-2 bg-[#00ff00] text-black font-black text-[10px] uppercase shadow-[0_0_10px_#00ff00]">
+          <button 
+            onClick={onComplete} 
+            className="px-6 py-2 mt-4 bg-[#00ff00] text-black font-black text-[10px] uppercase shadow-[0_0_10px_#00ff00]"
+          >
             Execute Proposal
           </button>
         )}
       </div>
-    </>
+    </div>
   );
 }
