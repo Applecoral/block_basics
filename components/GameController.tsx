@@ -16,7 +16,6 @@ export default function GameController() {
   const [gameStarted, setGameStarted] = useState(false);
   const [hasSavedProgress, setHasSavedProgress] = useState(false);
 
-  // 1. Mount Logic: Load A-Frame and check for existing save
   useEffect(() => {
     setMounted(true);
     
@@ -28,10 +27,23 @@ export default function GameController() {
 
     const script = document.createElement("script");
     script.src = "https://aframe.io/releases/1.6.0/aframe.min.js";
+    script.onload = () => {
+      // Register a simple component to ensure clicks work properly in VR/3D
+      if (typeof window !== "undefined" && (window as any).AFRAME) {
+        if (!(window as any).AFRAME.components['cursor-listener']) {
+          (window as any).AFRAME.registerComponent('cursor-listener', {
+            init: function () {
+              this.el.addEventListener('click', function (evt: any) {
+                // This helps A-Frame sync with standard DOM events
+              });
+            }
+          });
+        }
+      }
+    };
     document.head.appendChild(script);
   }, []);
 
-  // 2. Auto-Save Logic: Runs whenever currentStep changes
   useEffect(() => {
     if (mounted) {
       localStorage.setItem("on_chain_journey_progress", currentStep.toString());
@@ -44,10 +56,6 @@ export default function GameController() {
     setGameStarted(true);
   };
 
-  const resumeGame = () => {
-    setGameStarted(true);
-  };
-
   if (!mounted) return null;
 
   const ActiveEpisode = episodes[currentStep];
@@ -56,9 +64,8 @@ export default function GameController() {
   return (
     <div className="relative w-full h-screen bg-[#050505] overflow-hidden font-mono text-white">
       {!gameStarted ? (
-        /* Welcome Page Overlay */
         <div className="absolute inset-0 z-50 flex flex-col items-center justify-center bg-black p-6 text-center">
-          <div className="mb-8">
+          <div className="mb-8 text-center">
             <h1 className="text-4xl font-black tracking-[0.2em] text-[#00f2ff] mb-2">ON-CHAIN</h1>
             <h2 className="text-xl tracking-[0.5em] text-[#ff00ff] uppercase opacity-80">30 Day Journey</h2>
           </div>
@@ -72,7 +79,7 @@ export default function GameController() {
             {hasSavedProgress ? (
               <>
                 <button 
-                  onClick={resumeGame}
+                  onClick={() => setGameStarted(true)}
                   className="px-12 py-4 bg-[#00f2ff] text-black hover:bg-white transition-all duration-300 font-bold uppercase tracking-widest text-sm shadow-[0_0_20px_rgba(0,242,255,0.4)]"
                 >
                   Resume Protocol (Day {currentStep + 1})
@@ -95,16 +102,23 @@ export default function GameController() {
           </div>
         </div>
       ) : (
-        /* The 3D Scene */
-        <a-scene embedded vr-mode-ui="enabled: false" inspector="url: false">
+        <a-scene embedded vr-mode-ui="enabled: false" inspector="url: false cursor: false">
           <a-sky color="#050505"></a-sky>
-          <a-grid position="0 0 0" rotation="-90 0 0" width="100" height="100" color="#111" opacity="0.5"></a-grid>
+          <a-grid position="0 0 0" rotation="-90 0 0" width="100" height="100" color="#111" opacity="0.3"></a-grid>
+          
           <ActiveEpisode onComplete={() => setCurrentStep(s => Math.min(s + 1, 29))} />
-          <a-entity camera position="0 1.6 0" look-controls wasd-controls></a-entity>
+          
+          <a-entity camera position="0 1.6 0" look-controls wasd-controls>
+            {/* The Invisible Raycaster that follows your mouse/touch */}
+            <a-entity
+              cursor="rayOrigin: mouse"
+              raycaster="objects: .clickable, [onClick]; far: 50; interval: 100"
+            ></a-entity>
+          </a-entity>
         </a-scene>
       )}
 
-      {/* Persistence UI Layer (Visible after start) */}
+      {/* Persistence UI Layer */}
       {gameStarted && (
         <div className="absolute inset-0 pointer-events-none flex flex-col justify-between p-6 z-10">
           <div className="flex justify-between items-start">
@@ -129,21 +143,6 @@ export default function GameController() {
           </div>
         </div>
       )}
-
-      {/* Architect Link */}
-      <div className="absolute bottom-6 right-6 z-[60] flex items-center gap-2">
-        <a 
-          href="https://x.com/applecoraline" 
-          target="_blank" 
-          rel="noopener noreferrer"
-          className="flex items-center gap-2 bg-white/5 hover:bg-white/10 border border-white/10 px-3 py-1.5 rounded-full transition-all group"
-        >
-          <span className="text-[9px] uppercase tracking-widest text-white/40 group-hover:text-white/80 transition-colors">Architect</span>
-          <svg width="10" height="10" viewBox="0 0 1200 1227" fill="none" xmlns="http://www.w3.org/2000/svg" className="fill-white/60 group-hover:fill-[#00f2ff]">
-            <path d="M714.163 519.284L1160.89 0H1055.03L667.137 450.887L357.328 0H0L468.492 681.821L0 1226.37H105.866L515.491 750.218L842.672 1226.37H1200L714.137 519.284H714.163ZM569.165 687.828L521.697 619.934L144.011 79.6944H306.615L611.412 515.685L658.88 583.579L1055.08 1150.3H892.476L569.165 687.854V687.828Z" />
-          </svg>
-        </a>
-      </div>
     </div>
   );
 }
