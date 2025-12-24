@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import dynamic from "next/dynamic";
+import { FarcasterSDK } from '@farcaster/farcaster-sdk';
 
 const episodes = Array.from({ length: 30 }, (_, i) => {
   const chapter = i < 10 ? 1 : i < 20 ? 2 : 3;
@@ -23,6 +24,10 @@ export default function GameController() {
       setHasSavedProgress(true);
       setCurrentStep(parseInt(saved, 10));
     }
+
+    // Initialize Farcaster SDK and call ready when content mounts
+    const sdk = new FarcasterSDK();
+    sdk.ready();
   }, []);
 
   useEffect(() => {
@@ -74,7 +79,6 @@ export default function GameController() {
             </button>
           )}
 
-          {/* Author/Architect Link */}
           <p className="text-[10px] opacity-60 mt-4">
             Built by <a href="https://x.com/applecoraline" target="_blank" className="text-[#00f2ff] hover:underline">AppleCoraline</a>
           </p>
@@ -111,4 +115,4 @@ export default function GameController() {
       )}
     </div>
   );
-              }
+            }
