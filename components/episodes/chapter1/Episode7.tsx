@@ -16,6 +16,15 @@ export default function Episode7({ onComplete }: Props) {
   return (
     <div className="w-full h-full flex flex-col items-center justify-center p-6 bg-[#050505] text-white">
       <div className="bg-black/90 border-2 border-[#FFD700] p-6 w-80 flex flex-col items-center shadow-[0_0_30px_rgba(255,215,0,0.2)] space-y-4">
+
+        {/* Episode Explainer */}
+        <p className="text-[#FFD700] text-[10px] uppercase font-black tracking-widest text-center">
+          EPISODE 7: PROOF OF WORK
+        </p>
+        <p className="text-white/50 text-[9px] text-center mb-4">
+          Capture floating hash fragments to build computational power. Once your hash power reaches 100%, the block will be verified and the reward can be claimed.
+        </p>
+
         <h2 className="text-[#FFD700] text-xs uppercase font-black tracking-widest">PROOF_OF_WORK</h2>
         <p className="text-white/40 text-[9px] text-center mb-2">
           Intercept floating hash fragments to provide computational power
