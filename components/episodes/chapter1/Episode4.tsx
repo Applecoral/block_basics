@@ -4,79 +4,104 @@ import { useState } from "react";
 interface Props { onComplete: () => void; }
 
 export default function Episode4({ onComplete }: Props) {
-  const [isBroadcasting, setIsBroadcasting] = useState(false);
-  const [nodesActive, setNodesActive] = useState(0);
+  const [activeRoute, setActiveRoute] = useState<number[]>([]);
+  const requiredRoute = [1, 2, 3];
+  const isComplete = JSON.stringify(activeRoute) === JSON.stringify(requiredRoute);
 
-  const startBroadcast = () => {
-    setIsBroadcasting(true);
-    // Simulate nodes receiving data across the network
-    [1, 2, 3].forEach((i) => {
-      setTimeout(() => setNodesActive(i), i * 800);
-    });
+  const handleNodeClick = (id: number) => {
+    if (isComplete) return;
+    if (activeRoute.includes(id)) {
+      setActiveRoute([]); // Reset if they click the same one
+    } else {
+      setActiveRoute([...activeRoute, id]);
+    }
   };
 
   return (
     <>
       <a-entity>
-        {/* Central Broadcasting Core */}
-        <a-octahedron 
-          position="0 2.5 -5" 
-          radius="0.4" 
-          material={`color: #ff00ff; emissive: #ff00ff; emissiveIntensity: ${isBroadcasting ? 2 : 0.5}`}
-          animation={isBroadcasting ? "property: rotation; to: 0 360 0; dur: 2000; loop: true" : ""}
-        ></a-octahedron>
+        {/* Environment: Dark Floor */}
+        <a-plane rotation="-90 0 0" width="100" height="100" color="#020202"></a-plane>
 
-        {/* Node Server Tower 1 */}
-        <a-entity position="-2.5 0 -4">
-          <a-box scale="0.6 2 0.6" position="0 1 0" color="#111"></a-box>
-          <a-sphere radius="0.1" position="0 2.2 0" material={`color: ${nodesActive >= 1 ? '#00f2ff' : '#333'}; emissive: ${nodesActive >= 1 ? '#00f2ff' : '#000'}`}></a-sphere>
+        {/* Central Uplink Tower */}
+        <a-entity position="0 0 -6">
+          <a-box scale="1 4 1" color="#111" metalness="1" roughness="0.2">
+            <a-rect width="0.5" height="3" position="0 0 0.51" material="color: #001122"></a-rect>
+          </a-box>
+          {/* Pulsing Core Light */}
+          <a-sphere position="0 3.5 0" radius="0.2" color="#ff00ff" 
+            animation="property: light.intensity; from: 5; to: 10; dir: alternate; loop: true; dur: 1000"
+            light="type: point; color: #ff00ff; intensity: 2; distance: 10">
+          </a-sphere>
         </a-entity>
 
-        {/* Node Server Tower 2 */}
-        <a-entity position="0 0 -7">
-          <a-box scale="0.6 2 0.6" position="0 1 0" color="#111"></a-box>
-          <a-sphere radius="0.1" position="0 2.2 0" material={`color: ${nodesActive >= 2 ? '#00f2ff' : '#333'}; emissive: ${nodesActive >= 2 ? '#00f2ff' : '#000'}`}></a-sphere>
+        {/* Node 1: Left Rack */}
+        <a-entity position="-3 0 -4" onClick={() => handleNodeClick(1)}>
+          <a-box scale="0.8 2.5 0.8" color={activeRoute.includes(1) ? "#00f2ff" : "#111"}>
+            <a-text value="STATION_A" position="0 1.5 0" align="center" width="3" color="#fff"></a-text>
+          </a-box>
+          <a-sphere radius="0.1" position="0 2.2 0" material={`emissive: ${activeRoute.includes(1) ? '#00f2ff' : '#333'}; emissiveIntensity: 2`}></a-sphere>
         </a-entity>
 
-        {/* Node Server Tower 3 */}
-        <a-entity position="2.5 0 -4">
-          <a-box scale="0.6 2 0.6" position="0 1 0" color="#111"></a-box>
-          <a-sphere radius="0.1" position="0 2.2 0" material={`color: ${nodesActive >= 3 ? '#00f2ff' : '#333'}; emissive: ${nodesActive >= 3 ? '#00f2ff' : '#000'}`}></a-sphere>
+        {/* Node 2: Back Rack */}
+        <a-entity position="0 0 -9" onClick={() => handleNodeClick(2)}>
+          <a-box scale="0.8 2.5 0.8" color={activeRoute.includes(2) ? "#00f2ff" : "#111"}>
+            <a-text value="STATION_B" position="0 1.5 0" align="center" width="3" color="#fff"></a-text>
+          </a-box>
+          <a-sphere radius="0.1" position="0 2.2 0" material={`emissive: ${activeRoute.includes(2) ? '#00f2ff' : '#333'}; emissiveIntensity: 2`}></a-sphere>
         </a-entity>
 
-        {/* Holographic Broadcast Data Beams */}
-        {isBroadcasting && (
-           <a-entity>
-             <a-entity line={`start: 0 2.5 -5; end: -2.5 2.2 -4; color: #ff00ff; opacity: ${nodesActive >= 1 ? 1 : 0.1}`}></a-entity>
-             <a-entity line={`start: 0 2.5 -5; end: 0 2.2 -7; color: #ff00ff; opacity: ${nodesActive >= 2 ? 1 : 0.1}`}></a-entity>
-             <a-entity line={`start: 0 2.5 -5; end: 2.5 2.2 -4; color: #ff00ff; opacity: ${nodesActive >= 3 ? 1 : 0.1}`}></a-entity>
-           </a-entity>
-        )}
+        {/* Node 3: Right Rack */}
+        <a-entity position="3 0 -4" onClick={() => handleNodeClick(3)}>
+          <a-box scale="0.8 2.5 0.8" color={activeRoute.includes(3) ? "#00f2ff" : "#111"}>
+            <a-text value="STATION_C" position="0 1.5 0" align="center" width="3" color="#fff"></a-text>
+          </a-box>
+          <a-sphere radius="0.1" position="0 2.2 0" material={`emissive: ${activeRoute.includes(3) ? '#00f2ff' : '#333'}; emissiveIntensity: 2`}></a-sphere>
+        </a-entity>
+
+        {/* Connection Lines (Cables) */}
+        {activeRoute.map((nodeId, idx) => {
+          if (idx === 0) return null;
+          const prev = activeRoute[idx - 1];
+          const posMap: any = { 1: "-3 1 -4", 2: "0 1 -9", 3: "3 1 -4" };
+          return (
+            <a-entity key={idx} line={`start: ${posMap[prev]}; end: ${posMap[nodeId]}; color: #00f2ff; opacity: 1`}></a-entity>
+          );
+        })}
       </a-entity>
 
-      {/* 2D HUD OVERLAY */}
+      {/* 2D CYBER HUD */}
       <div className="fixed inset-0 z-[100] flex flex-col items-center justify-end pb-12 pointer-events-none">
-        <div className="pointer-events-auto bg-black/90 border-t-2 border-[#ff00ff] p-6 w-80 text-center shadow-[0_-10px_30px_rgba(255,0,255,0.1)]">
-          <p className="text-[#ff00ff] text-[10px] tracking-[0.4em] mb-2 uppercase font-black">P2P_DISTRIBUTION</p>
-          <p className="text-white/60 text-[10px] mb-6 leading-relaxed">
-            Data must propagate across the network. <br/>
-            Initialize peer-to-peer broadcast.
+        <div className="pointer-events-auto bg-[#050505]/95 border-b-4 border-[#ff00ff] p-6 w-80 shadow-[0_20px_50px_rgba(255,0,255,0.1)]">
+          <div className="flex justify-between items-center mb-4">
+            <p className="text-[#ff00ff] text-[10px] tracking-widest font-black">MANUAL_ROUTING</p>
+            <div className="flex gap-1">
+               {[1,2,3].map(i => (
+                 <div key={i} className={`w-2 h-2 rounded-full ${activeRoute.length >= i ? 'bg-[#00f2ff]' : 'bg-white/10'}`} />
+               ))}
+            </div>
+          </div>
+          
+          <p className="text-white/40 text-[9px] uppercase leading-relaxed mb-6">
+            Sequence error. Manually route packet from <br/>
+            <span className="text-white">A → B → C</span> to stabilize the broadcast.
           </p>
           
-          {nodesActive < 3 ? (
-            <button 
-              disabled={isBroadcasting}
-              onClick={startBroadcast} 
-              className={`w-full py-4 border-2 transition-all font-bold text-xs uppercase tracking-widest ${isBroadcasting ? 'border-[#333] text-[#333]' : 'border-[#ff00ff] text-[#ff00ff] hover:bg-[#ff00ff] hover:text-black shadow-[0_0_15px_rgba(255,0,255,0.3)]'}`}
-            >
-              {isBroadcasting ? `Syncing [${nodesActive}/3] Nodes...` : "Initiate Broadcast"}
-            </button>
+          {!isComplete ? (
+            <div className="flex flex-col gap-2">
+              <button 
+                onClick={() => setActiveRoute([])}
+                className="text-[#ff00ff] text-[9px] uppercase tracking-widest py-2 border border-[#ff00ff]/20 hover:bg-[#ff00ff]/10 transition-all"
+              >
+                Clear Signal Path
+              </button>
+            </div>
           ) : (
             <button 
               onClick={onComplete} 
-              className="w-full py-4 bg-[#00f2ff] text-black font-black text-xs uppercase tracking-[0.2em] shadow-[0_0_20px_#00f2ff] animate-pulse"
+              className="w-full py-4 bg-[#00f2ff] text-black font-black text-xs uppercase tracking-[0.2em] shadow-[0_0_20px_#00f2ff]"
             >
-              Network Synced →
+              Route Verified →
             </button>
           )}
         </div>
