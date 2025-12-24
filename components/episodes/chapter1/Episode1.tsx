@@ -22,7 +22,7 @@ export default function Episode1({ onComplete }: Props) {
         <div className="flex items-center gap-2 mb-3">
           <div className="w-2 h-2 bg-[#ff00ff] animate-pulse rounded-full" />
           <p className={`text-[12px] tracking-[0.3em] uppercase font-black ${isSolved ? 'text-[#00f2ff]' : 'text-[#ff00ff]'}`}>
-            {isSolved ? "PROTOCOL DECRYPTED" : "TYPE TO DECRYPT"}
+            {isSolved ? "PROTOCOL DECRYPTED" : "TYPE THE WORD ON THE BLOCKCHAIN TO DECRYPT"}
           </p>
         </div>
 
@@ -37,6 +37,13 @@ export default function Episode1({ onComplete }: Props) {
           />
           {!val && <div className="absolute bottom-2 left-1/2 -translate-x-1/2 w-32 h-[2px] bg-[#ff00ff] animate-bounce" />}
         </div>
+
+        {/* Hint added here */}
+        {!isSolved && (
+          <p className="text-[10px] text-[#ff00ff]/60 mt-2 uppercase tracking-[0.2em]">
+            Hint: It’s the first word in “genesis block”
+          </p>
+        )}
 
         {isSolved && (
           <button 
