@@ -3,42 +3,66 @@ import { useState } from "react";
 
 interface Props { onComplete: () => void; }
 
-export default function Episode26({ onComplete }) {
+export default function Episode26({ onComplete }: Props) {
   const [touched, setTouched] = useState([false, false, false]);
   const allSynced = touched.every(t => t);
 
+  const toggleEcosystem = (index: number) => {
+    const next = [...touched];
+    next[index] = true;
+    setTouched(next);
+  };
+
   return (
-    <>
-      <a-entity>
-        {/* The Three Ecosystems */}
-        <a-sphere position="-2 1.5 -4" radius="0.7" color="#627EEA" opacity="0.6" onClick={() => setTouched([true, touched[1], touched[2]])}>
-          <a-text value="ETH" position="0 1 0" align="center"></a-text>
-        </a-sphere>
-        
-        <a-sphere position="0 2.5 -5" radius="0.7" color="#0052FF" opacity="0.6" onClick={() => setTouched([touched[0], true, touched[2]])}>
-          <a-text value="BASE" position="0 1 0" align="center"></a-text>
-        </a-sphere>
+    <div className="flex flex-col items-center mt-10">
+      <h2 className="text-[#ff00ff] text-sm font-bold uppercase mb-4 text-center">Protocol: Omni-chain Sync</h2>
 
-        <a-sphere position="2 1.5 -4" radius="0.7" color="#14F195" opacity="0.6" onClick={() => setTouched([touched[0], touched[1], true])}>
-          <a-text value="SOL" position="0 1 0" align="center"></a-text>
-        </a-sphere>
+      <p className="text-white text-[10px] text-center max-w-xs mb-4 uppercase opacity-70">
+        {allSynced
+          ? "Network mesh active. Data is universal."
+          : "Activate cross-chain communications. Tap each ecosystem to link them."}
+      </p>
 
-        {/* Sync Lines */}
-        {touched[0] && touched[1] && <a-entity line="start: -2 1.5 -4; end: 0 2.5 -5; color: white"></a-entity>}
-        {touched[1] && touched[2] && <a-entity line="start: 0 2.5 -5; end: 2 1.5 -4; color: white"></a-entity>}
-      </a-entity>
+      <div className="flex gap-4 mb-4">
+        <button
+          disabled={touched[0]}
+          onClick={() => toggleEcosystem(0)}
+          className={`px-4 py-2 border-2 uppercase text-[10px] font-bold ${
+            touched[0] ? "border-gray-600 text-gray-600" : "border-[#627EEA] text-[#627EEA]"
+          }`}
+        >
+          ETH
+        </button>
 
-      <div className="flex flex-col items-center">
-        <p className="text-[#ff00ff] text-[10px] tracking-widest mb-2 uppercase font-bold text-center">Protocol: Omni-chain sync</p>
-        <p className="text-white text-[10px] text-center max-w-xs mb-4 uppercase opacity-70">
-          {allSynced ? "Network mesh active. Data is universal." : "Tap each ecosystem to establish a cross-chain communications link."}
-        </p>
-        {allSynced && (
-          <button onClick={onComplete} className="px-6 py-2 border-2 border-[#00f2ff] text-[#00f2ff] font-bold text-[10px] uppercase">
-            Verify Global Mesh
-          </button>
-        )}
+        <button
+          disabled={touched[1]}
+          onClick={() => toggleEcosystem(1)}
+          className={`px-4 py-2 border-2 uppercase text-[10px] font-bold ${
+            touched[1] ? "border-gray-600 text-gray-600" : "border-[#0052FF] text-[#0052FF]"
+          }`}
+        >
+          BASE
+        </button>
+
+        <button
+          disabled={touched[2]}
+          onClick={() => toggleEcosystem(2)}
+          className={`px-4 py-2 border-2 uppercase text-[10px] font-bold ${
+            touched[2] ? "border-gray-600 text-gray-600" : "border-[#14F195] text-[#14F195]"
+          }`}
+        >
+          SOL
+        </button>
       </div>
-    </>
+
+      {allSynced && (
+        <button
+          onClick={onComplete}
+          className="px-6 py-2 border-2 border-[#00f2ff] text-[#00f2ff] font-bold text-[10px] uppercase"
+        >
+          Verify Global Mesh
+        </button>
+      )}
+    </div>
   );
 }
