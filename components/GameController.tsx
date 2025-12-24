@@ -18,7 +18,6 @@ export default function GameController() {
 
   useEffect(() => {
     setMounted(true);
-
     const saved = localStorage.getItem("on_chain_journey_progress");
     if (saved) {
       setHasSavedProgress(true);
@@ -74,6 +73,11 @@ export default function GameController() {
               Initialize Protocol
             </button>
           )}
+
+          {/* Author/Architect Link */}
+          <p className="text-[10px] opacity-60 mt-4">
+            Built by <a href="https://x.com/applecoraline" target="_blank" className="text-[#00f2ff] hover:underline">AppleCoraline</a>
+          </p>
         </div>
       ) : (
         <div className="w-full max-w-xl flex flex-col items-center gap-6">
@@ -107,4 +111,4 @@ export default function GameController() {
       )}
     </div>
   );
-}
+              }
