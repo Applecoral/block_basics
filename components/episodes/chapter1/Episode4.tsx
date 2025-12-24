@@ -10,8 +10,9 @@ export default function Episode4({ onComplete }: Props) {
 
   const handleNodeClick = (id: number) => {
     if (isComplete) return;
+    // If they click a node already in the path, reset (to avoid confusion)
     if (activeRoute.includes(id)) {
-      setActiveRoute([]); // Reset if they click the same one
+      setActiveRoute([]);
     } else {
       setActiveRoute([...activeRoute, id]);
     }
@@ -20,88 +21,99 @@ export default function Episode4({ onComplete }: Props) {
   return (
     <>
       <a-entity>
-        {/* Environment: Dark Floor */}
-        <a-plane rotation="-90 0 0" width="100" height="100" color="#020202"></a-plane>
+        {/* Atmosphere: Dark Industrial Floor */}
+        <a-plane rotation="-90 0 0" width="100" height="100" color="#050505"></a-plane>
+        
+        {/* Atmospheric Lighting */}
+        <a-light type="ambient" color="#111"></a-light>
+        <a-light type="point" position="0 5 -5" intensity="0.5" color="#00f2ff"></a-light>
 
-        {/* Central Uplink Tower */}
-        <a-entity position="0 0 -6">
-          <a-box scale="1 4 1" color="#111" metalness="1" roughness="0.2">
-            <a-rect width="0.5" height="3" position="0 0 0.51" material="color: #001122"></a-rect>
+        {/* Central Uplink Tower - The Target */}
+        <a-entity position="0 0 -8">
+          <a-box scale="1.2 5 1.2" material="color: #0a0a0a; metalness: 0.9; roughness: 0.1">
+            {/* Pulsing Status Core */}
+            <a-box 
+              scale="0.6 0.2 0.6" 
+              position="0 2 0.35" 
+              material={`color: ${isComplete ? '#00f2ff' : '#ff00ff'}; emissive: ${isComplete ? '#00f2ff' : '#ff00ff'}`}
+              animation="property: opacity; from: 1; to: 0.3; dir: alternate; loop: true; dur: 800"
+            ></a-box>
           </a-box>
-          {/* Pulsing Core Light */}
-          <a-sphere position="0 3.5 0" radius="0.2" color="#ff00ff" 
-            animation="property: light.intensity; from: 5; to: 10; dir: alternate; loop: true; dur: 1000"
-            light="type: point; color: #ff00ff; intensity: 2; distance: 10">
-          </a-sphere>
+          <a-text value="CORE_UPLINK" position="0 3 0.7" align="center" width="4" font="mozillavr"></a-text>
         </a-entity>
 
-        {/* Node 1: Left Rack */}
-        <a-entity position="-3 0 -4" onClick={() => handleNodeClick(1)}>
-          <a-box scale="0.8 2.5 0.8" color={activeRoute.includes(1) ? "#00f2ff" : "#111"}>
-            <a-text value="STATION_A" position="0 1.5 0" align="center" width="3" color="#fff"></a-text>
+        {/* Server Station A */}
+        <a-entity position="-4 0 -5" onClick={() => handleNodeClick(1)}>
+          <a-box scale="1 3 1" material={`color: ${activeRoute.includes(1) ? '#00f2ff' : '#1a1a1a'}; metalness: 0.8`}>
+            <a-text value="ALPHA" position="0 1.8 0.51" align="center" width="3" color="#fff"></a-text>
+            {/* Scanning Laser Beam */}
+            <a-rect width="0.8" height="0.05" position="0 1 0.52" material="color: #00f2ff; emissive: #00f2ff"></a-rect>
           </a-box>
-          <a-sphere radius="0.1" position="0 2.2 0" material={`emissive: ${activeRoute.includes(1) ? '#00f2ff' : '#333'}; emissiveIntensity: 2`}></a-sphere>
         </a-entity>
 
-        {/* Node 2: Back Rack */}
-        <a-entity position="0 0 -9" onClick={() => handleNodeClick(2)}>
-          <a-box scale="0.8 2.5 0.8" color={activeRoute.includes(2) ? "#00f2ff" : "#111"}>
-            <a-text value="STATION_B" position="0 1.5 0" align="center" width="3" color="#fff"></a-text>
+        {/* Server Station B */}
+        <a-entity position="0 0 -4" onClick={() => handleNodeClick(2)}>
+          <a-box scale="1 3 1" material={`color: ${activeRoute.includes(2) ? '#00f2ff' : '#1a1a1a'}; metalness: 0.8`}>
+            <a-text value="BETA" position="0 1.8 0.51" align="center" width="3" color="#fff"></a-text>
+            <a-rect width="0.8" height="0.05" position="0 1 0.52" material="color: #00f2ff; emissive: #00f2ff"></a-rect>
           </a-box>
-          <a-sphere radius="0.1" position="0 2.2 0" material={`emissive: ${activeRoute.includes(2) ? '#00f2ff' : '#333'}; emissiveIntensity: 2`}></a-sphere>
         </a-entity>
 
-        {/* Node 3: Right Rack */}
-        <a-entity position="3 0 -4" onClick={() => handleNodeClick(3)}>
-          <a-box scale="0.8 2.5 0.8" color={activeRoute.includes(3) ? "#00f2ff" : "#111"}>
-            <a-text value="STATION_C" position="0 1.5 0" align="center" width="3" color="#fff"></a-text>
+        {/* Server Station C */}
+        <a-entity position="4 0 -5" onClick={() => handleNodeClick(3)}>
+          <a-box scale="1 3 1" material={`color: ${activeRoute.includes(3) ? '#00f2ff' : '#1a1a1a'}; metalness: 0.8`}>
+            <a-text value="GAMMA" position="0 1.8 0.51" align="center" width="3" color="#fff"></a-text>
+            <a-rect width="0.8" height="0.05" position="0 1 0.52" material="color: #00f2ff; emissive: #00f2ff"></a-rect>
           </a-box>
-          <a-sphere radius="0.1" position="0 2.2 0" material={`emissive: ${activeRoute.includes(3) ? '#00f2ff' : '#333'}; emissiveIntensity: 2`}></a-sphere>
         </a-entity>
 
-        {/* Connection Lines (Cables) */}
+        {/* Signal Cables (Neon Flux Lines) */}
         {activeRoute.map((nodeId, idx) => {
           if (idx === 0) return null;
           const prev = activeRoute[idx - 1];
-          const posMap: any = { 1: "-3 1 -4", 2: "0 1 -9", 3: "3 1 -4" };
+          const posMap: any = { 1: "-4 1.5 -5", 2: "0 1.5 -4", 3: "4 1.5 -5" };
           return (
-            <a-entity key={idx} line={`start: ${posMap[prev]}; end: ${posMap[nodeId]}; color: #00f2ff; opacity: 1`}></a-entity>
+            <a-entity 
+              key={idx} 
+              line={`start: ${posMap[prev]}; end: ${posMap[nodeId]}; color: #00f2ff`}
+            ></a-entity>
           );
         })}
       </a-entity>
 
       {/* 2D CYBER HUD */}
       <div className="fixed inset-0 z-[100] flex flex-col items-center justify-end pb-12 pointer-events-none">
-        <div className="pointer-events-auto bg-[#050505]/95 border-b-4 border-[#ff00ff] p-6 w-80 shadow-[0_20px_50px_rgba(255,0,255,0.1)]">
+        <div className="pointer-events-auto bg-[#050505]/95 border-b-4 border-[#00f2ff] p-6 w-80 shadow-[0_20px_50px_rgba(0,242,255,0.2)] backdrop-blur-md">
           <div className="flex justify-between items-center mb-4">
-            <p className="text-[#ff00ff] text-[10px] tracking-widest font-black">MANUAL_ROUTING</p>
+            <div>
+              <p className="text-[#00f2ff] text-[10px] tracking-[0.3em] font-black uppercase">P2P_ROUTING_OVERRIDE</p>
+              <p className="text-white/20 text-[8px] font-mono">STATUS: INTERCEPTING_PACKETS</p>
+            </div>
             <div className="flex gap-1">
                {[1,2,3].map(i => (
-                 <div key={i} className={`w-2 h-2 rounded-full ${activeRoute.length >= i ? 'bg-[#00f2ff]' : 'bg-white/10'}`} />
+                 <div key={i} className={`w-1.5 h-1.5 rotate-45 ${activeRoute.length >= i ? 'bg-[#00f2ff] shadow-[0_0_8px_#00f2ff]' : 'bg-white/10'}`} />
                ))}
             </div>
           </div>
           
-          <p className="text-white/40 text-[9px] uppercase leading-relaxed mb-6">
-            Sequence error. Manually route packet from <br/>
-            <span className="text-white">A → B → C</span> to stabilize the broadcast.
+          <p className="text-white/50 text-[10px] uppercase leading-relaxed mb-6 font-mono">
+            Packet sequence corruption detected. <br/>
+            Bridge servers: <span className="text-white font-bold">ALPHA → BETA → GAMMA</span>
           </p>
           
           {!isComplete ? (
-            <div className="flex flex-col gap-2">
-              <button 
-                onClick={() => setActiveRoute([])}
-                className="text-[#ff00ff] text-[9px] uppercase tracking-widest py-2 border border-[#ff00ff]/20 hover:bg-[#ff00ff]/10 transition-all"
-              >
-                Clear Signal Path
-              </button>
-            </div>
+            <button 
+              onClick={() => setActiveRoute([])}
+              className="w-full text-[#ff00ff] text-[9px] uppercase tracking-widest py-3 border border-[#ff00ff]/30 hover:bg-[#ff00ff]/10 transition-all font-bold"
+            >
+              Reset Signal Path
+            </button>
           ) : (
             <button 
               onClick={onComplete} 
-              className="w-full py-4 bg-[#00f2ff] text-black font-black text-xs uppercase tracking-[0.2em] shadow-[0_0_20px_#00f2ff]"
+              className="w-full py-4 bg-[#00f2ff] text-black font-black text-xs uppercase tracking-[0.2em] shadow-[0_0_30px_rgba(0,242,255,0.6)] hover:scale-105 transition-transform"
             >
-              Route Verified →
+              Uplink Established →
             </button>
           )}
         </div>
