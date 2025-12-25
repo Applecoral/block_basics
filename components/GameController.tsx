@@ -17,42 +17,30 @@ export default function GameController() {
   const [gameStarted, setGameStarted] = useState(false);
   const [hasSavedProgress, setHasSavedProgress] = useState(false);
 
-  // Initialize Farcaster SDK
   useEffect(() => {
-    setMounted(true);
-    const saved = localStorage.getItem("on_chain_journey_progress");
-    if (saved) {
-      setHasSavedProgress(true);
-      setCurrentStep(parseInt(saved, 10));
-    }
+  setMounted(true);
 
-    (async () => {
-    await sdk.actions.ready();
+  const saved = localStorage.getItem("on_chain_journey_progress");
+  if (saved) {
+    setHasSavedProgress(true);
+    setCurrentStep(parseInt(saved, 10));
+  }
+
+  // Call Mini App SDK ready once the UI is mounted
+  (async () => {
+    await sdk.actions.ready({ disableNativeGestures: true });
   })();
 }, []);
 
-    // Call Farcaster ready once the UI is mounted
-    if (typeof window !== "undefined" && window.FarcasterSDK) {
-      const fc = new FarcasterSDK();
-      fc.ready({ disableNativeGestures: true });
-    }
-  }, []);
-
-  useEffect(() => {
-    if (mounted) {
-      localStorage.setItem("on_chain_journey_progress", currentStep.toString());
-    }
-  }, [currentStep, mounted]);
-
-  const startNewGame = () => {
-    localStorage.removeItem("on_chain_journey_progress");
-    setCurrentStep(0);
-    setGameStarted(true);
-  };
+useEffect(() => {
+  if (mounted) {
+    localStorage.setItem("on_chain_journey_progress", currentStep.toString());
+  }
+}, [currentStep, mounted]);
 
   if (!mounted) return null;
 
-  const ActiveEpisode = episodes[currentStep];
+const ActiveEpisode = episodes[currentStep];
 
   return (
     <div className="relative w-full h-screen bg-[#050505] text-white font-mono flex flex-col items-center justify-center p-6">
