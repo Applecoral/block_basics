@@ -52,7 +52,7 @@ const ActiveEpisode = episodes[currentStep];
     <div className="relative w-full h-screen bg-[#050505] text-white font-mono flex flex-col items-center justify-center p-6">
       {!gameStarted ? (
         <div className="text-center">
-          <h1 className="text-4xl font-black text-[#00f2ff] mb-2 tracking-[0.2em]">ON-CHAIN</h1>
+          <h1 className="text-4xl font-black text-[#00f2ff] mb-2 tracking-[0.2em]">ONCHAIN</h1>
           <h2 className="text-xl text-[#ff00ff] uppercase opacity-80 tracking-[0.5em] mb-6">30 Day Journey</h2>
           <p className="text-[10px] opacity-60 mb-4">Master the protocols of the new internet.</p>
           <p className="text-[10px] opacity-60 mb-8">3 Chapters. 30 Challenges. Full Sovereignty.</p>
