@@ -26,6 +26,11 @@ export default function GameController() {
       setCurrentStep(parseInt(saved, 10));
     }
 
+    (async () => {
+    await sdk.actions.ready();
+  })();
+}, []);
+
     // Call Farcaster ready once the UI is mounted
     if (typeof window !== "undefined" && window.FarcasterSDK) {
       const fc = new FarcasterSDK();
