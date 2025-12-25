@@ -42,6 +42,12 @@ useEffect(() => {
 
 const ActiveEpisode = episodes[currentStep];
 
+  const startNewGame = () => {
+  localStorage.removeItem("on_chain_journey_progress");
+  setCurrentStep(0);
+  setGameStarted(true);
+};
+
   return (
     <div className="relative w-full h-screen bg-[#050505] text-white font-mono flex flex-col items-center justify-center p-6">
       {!gameStarted ? (
