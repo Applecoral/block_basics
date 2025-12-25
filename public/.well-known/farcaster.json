@@ -1,6 +1,6 @@
 {
   "frame": {
-    "name": "Block-30",
+    "name": "Block30",
     "version": "1",
     "iconUrl": "https://block-basics.vercel.app/icon.png",
     "homeUrl": "https://block-basics.vercel.app",
@@ -14,7 +14,8 @@
     "tags": [
       "games",
       "blockchain"
-    ]
+    ],
+    "heroImageUrl": "https://block-basics.vercel.app/splash.png"
   },
   "accountAssociation": {
     "header": "eyJmaWQiOjEwNTcxMjksInR5cGUiOiJhdXRoIiwia2V5IjoiMHhlOWNhOURGM2QwZmFhODlCMGU3ZGZBZWU3NTRGZDFBRTRhMTg2OWViIn0",
