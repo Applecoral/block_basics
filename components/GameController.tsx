@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import dynamic from "next/dynamic";
-import { FrameSDK } from "@farcaster/frame-sdk"; // make sure this is installed
+import { sdk } from "@farcaster/miniapp-sdk"; // Make sure this is installed
 
 const episodes = Array.from({ length: 30 }, (_, i) => {
   const chapter = i < 10 ? 1 : i < 20 ? 2 : 3;
@@ -17,7 +17,6 @@ export default function GameController() {
   const [gameStarted, setGameStarted] = useState(false);
   const [hasSavedProgress, setHasSavedProgress] = useState(false);
 
-  // Initialize Farcaster SDK
   useEffect(() => {
     setMounted(true);
     const saved = localStorage.getItem("on_chain_journey_progress");
@@ -26,11 +25,14 @@ export default function GameController() {
       setCurrentStep(parseInt(saved, 10));
     }
 
-    // Call Farcaster ready once the UI is mounted
-    if (typeof window !== "undefined" && window.FarcasterSDK) {
-      const fc = new FarcasterSDK();
-      fc.ready({ disableNativeGestures: true });
-    }
+    // Call Farcaster ready after UI mounts and local state is restored
+    (async () => {
+      try {
+        await sdk.actions.ready({ disableNativeGestures: true });
+      } catch (err) {
+        console.warn("Farcaster ready failed", err);
+      }
+    })();
   }, []);
 
   useEffect(() => {
