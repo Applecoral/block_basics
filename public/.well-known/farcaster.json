@@ -2,10 +2,10 @@
   "frame": {
     "name": "Block30",
     "version": "1",
-    "iconUrl": "https://block-basics.vercel.app/og-image.png",
+    "iconUrl": "https://block-basics.vercel.app/icon.png",
     "homeUrl": "https://block-basics.vercel.app",
-    "imageUrl": "https://block-basics.vercel.app/image.png",
-    "splashImageUrl": "https://block-basics.vercel.app/splash.png",
+    "imageUrl": "https://block-basics.vercel.app/og-image.png",
+    "splashImageUrl": "https://block-basics.vercel.app/og-image.png",
     "splashBackgroundColor": "#A3C4F3",
     "webhookUrl": "https://block-basics.vercel.app/api/webhook",
     "subtitle": "Explore the blockchain.",
@@ -15,7 +15,9 @@
       "games",
       "blockchain"
     ],
-    "heroImageUrl": "https://block-basics.vercel.app/splash.png"
+    "heroImageUrl": "https://block-basics.vercel.app/og-image.png",
+    "ogImageUrl": "https://block-basics.vercel.app/og-image.png",
+    "ogDescription": "Explore the blockchain through a 30-day challenge."
   },
   "accountAssociation": {
     "header": "eyJmaWQiOjEwNTcxMjksInR5cGUiOiJhdXRoIiwia2V5IjoiMHhlOWNhOURGM2QwZmFhODlCMGU3ZGZBZWU3NTRGZDFBRTRhMTg2OWViIn0",
