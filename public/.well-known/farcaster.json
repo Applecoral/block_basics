@@ -2,7 +2,7 @@
   "frame": {
     "name": "Block30",
     "version": "1",
-    "iconUrl": "https://block-basics.vercel.app/icon.png",
+    "iconUrl": "https://block-basics.vercel.app/og-image.png",
     "homeUrl": "https://block-basics.vercel.app",
     "imageUrl": "https://block-basics.vercel.app/og-image.png",
     "splashImageUrl": "https://block-basics.vercel.app/og-image.png",
@@ -16,8 +16,8 @@
       "blockchain"
     ],
     "heroImageUrl": "https://block-basics.vercel.app/og-image.png",
-    "ogImageUrl": "https://block-basics.vercel.app/og-image.png",
-    "ogDescription": "Explore the blockchain through a 30-day challenge."
+    "ogDescription": "Explore the blockchain through a 30-day challenge.",
+    "ogImageUrl": "https://block-basics.vercel.app/og-image.png"
   },
   "accountAssociation": {
     "header": "eyJmaWQiOjEwNTcxMjksInR5cGUiOiJhdXRoIiwia2V5IjoiMHhlOWNhOURGM2QwZmFhODlCMGU3ZGZBZWU3NTRGZDFBRTRhMTg2OWViIn0",
