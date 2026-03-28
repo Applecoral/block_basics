@@ -1,0 +1,20 @@
+@import "tailwindcss";
+
+:root {
+  --background: #050505;
+  --foreground: #ffffff;
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+}
+
+/* Custom styles for A-Frame embedded scenes */
+a-scene {
+  display: block;
+  position: relative;
+  height: 100%;
+  width: 100%;
+}
